@@ -24,6 +24,7 @@ Read the relevant bundled references before acting. Do not skip this sequence on
 | Writing copy, handoffs, documentation, partner emails, internal notes, or reports | `references/editorial-standards.md` |
 | Delegating work to another Claude session, Manus, a browser operator, or a developer | `templates/handoff-brief.md` |
 | Building or extending automation that reads/writes ListingPro listing data | `plugin/campus-sparbuch-toolkit/README.md` |
+| Phase 1 full configuration run | `scripts/listingpro-vollkonfiguration-v2.sh` (run section 0 first, confirm option keys before uncommenting TODO sections) |
 
 ## Operating principles
 
