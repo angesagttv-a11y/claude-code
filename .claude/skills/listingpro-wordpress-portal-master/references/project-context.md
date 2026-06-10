@@ -111,7 +111,7 @@ Diese Aufgaben nicht per WP-CLI vortäuschen. Sie brauchen WordPress Admin, API-
 
 | Skript | Zweck |
 |---|---|
-| `listingpro-vollkonfiguration-v2.sh` | Hauptskript für 17 Konfigurationsbereiche |
+| `listingpro-vollkonfiguration-v2.sh` | Hauptskript für 17 Konfigurationsbereiche (Entwurf in `scripts/`, lauffähige Teile: Backup, Pricing Packages, Features/Amenities; restliche Bereiche als TODO mit Inspektionsschritten) |
 | `bulk-import-listings-v2.sh` | WP All Import, CSV-Template, 5 Test-Listings |
 | `salzburg-listings-v2.sh` | 7 Salzburg-Listings |
 | `bewertung-feature-v2.sh` | Review-System, AJAX, Shortcode |
