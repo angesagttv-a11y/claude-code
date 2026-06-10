@@ -119,3 +119,73 @@ greifen, wenn Claude Code im Vault arbeitet.
   Vault-Automatisierung (Skills, Templates) aufgesetzt wird.
 - Graphify niemals über den kompletten Workspace laufen lassen - immer auf
   einen begrenzten Code-Root zeigen.
+
+## 7. Umsetzungsplan: Mehrere Agenten (Claude / Codex / Manus) auf demselben Code-Root
+
+Wenn in `60_DEV_AGENTEN_TOOLS/` mehrere Agenten (z.B. Claude Code, Codex,
+Manus) am selben Code-Root arbeiten, installiert `graphify install` den
+Skill standardmäßig **global** unter `~/.claude/skills/graphify`. Für
+projekt-/agentenspezifische Setups gibt es zusätzliche Flags:
+
+```bash
+# Skill nur für dieses Projekt installieren (statt global):
+graphify install --project
+
+# Skill für eine andere Plattform installieren (z.B. Codex statt Claude):
+graphify install --project --platform codex
+```
+
+`--platform` unterstützt u.a.: `claude`, `codex`, `windows`, `gemini`,
+`cursor`, `antigravity`, `kiro`, `devin`, `opencode`, `aider`, `copilot`,
+`amp`, `kilo`, `pi`, `trae`, `trae-cn`, `claw`, `hermes`, `codebuddy`,
+`kimi`, `droid`. Jede Plattform bekommt ihre eigene Skill-Datei am
+plattformtypischen Pfad (z.B. Codex → `.codex/skills/graphify/SKILL.md`,
+Claude → `.claude/skills/graphify/SKILL.md`).
+
+**Manus** ist keine in Graphify hinterlegte Plattform. Für einen Code-Root,
+an dem Manus arbeitet, am besten `--platform claude` (Standard) verwenden -
+Manus kann die erzeugten Artefakte (`graphify-out/graph.json`,
+`GRAPH_REPORT.md`) trotzdem lesen, auch ohne eigenen Skill-Eintrag.
+
+### Empfohlene Reihenfolge pro Code-Root
+
+1. Prüfen, welcher/welche Agent(en) in diesem Code-Root tatsächlich
+   arbeiten (Claude, Codex, Manus, ...).
+2. `.graphifyignore` anlegen.
+3. `graphify install --project` (Standard-Skill für Claude, projektlokal)
+   - falls Codex denselben Code-Root nutzt: zusätzlich
+     `graphify install --project --platform codex`.
+4. `/graphify .` ausführen → erzeugt `graphify-out/`.
+5. Bei Bedarf zusätzlichen Obsidian-Export für den Vault (siehe Abschnitt 5).
+
+### Obsidian-Skills im Vault installieren (passend zur bestehenden Struktur)
+
+Die kuratierten Vault-Bereiche (`00_INBOX`, `01_DAILY_NOTES`, `10_PROJEKTE`,
+`20_BEREICHE`, `30_RESSOURCEN`, `40_ENTSCHEIDUNGEN`, `50_OFFENE_FRAGEN`,
+`60_PROZESSE_SOPS`, `70_AGENTEN_MEMORY/<Agent>`, `80_ARCHIV`, `90_TEMPLATES`,
+`99_SYSTEM`) bleiben unverändert. Die Obsidian-Skills (Markdown, Bases, JSON
+Canvas, CLI, Defuddle aus `kepano/obsidian-skills`) werden **nur**
+vault-lokal installiert:
+
+```bash
+git clone https://github.com/kepano/obsidian-skills /tmp/obsidian-skills
+mkdir -p <VAULT_ROOT>/.claude/skills
+cp -r /tmp/obsidian-skills/skills/* <VAULT_ROOT>/.claude/skills/
+```
+
+Damit greifen die Skills nur, wenn Claude Code direkt im Vault-Ordner
+arbeitet - kein Einfluss auf Code-Roots oder Projektanker.
+
+### Reihenfolge für den Gesamt-Rollout
+
+1. Vault als Obsidian-Vault öffnen (`.obsidian/` wird automatisch erzeugt),
+   bevor Skills/Automatisierung hinzukommen.
+2. Bestehende `AGENTS.md`/Masterindex im Workspace-Root respektieren - keine
+   Änderungen ohne Bezug darauf.
+3. Pro Code-Root in `60_DEV_AGENTEN_TOOLS/` (oder wo Code tatsächlich liegt)
+   die Schritte aus "Empfohlene Reihenfolge pro Code-Root" durchgehen.
+4. Projektanker in `10_AKTIV/<Projekt_X>/` unverändert lassen - kein
+   Graphify direkt darauf, höchstens verdichtete Verlinkung aus
+   `Obsidian/10_PROJEKTE/<Projekt_X>/` heraus (siehe Abschnitt 5, Schritt 5).
+5. `30_PRIVAT/` und ähnliche sensible Bereiche von Graphify- und
+   Skill-Installationen ausnehmen, sofern nicht explizit gewünscht.
