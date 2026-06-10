@@ -18,9 +18,12 @@ Read the relevant bundled references before acting. Do not skip this sequence on
 | Task type | Read first |
 |---|---|
 | Any Campus Sparbuch task | `references/project-context.md`, then `references/wp-cli-local-wrapper.md` |
-| ListingPro feature, configuration, monetization, import, claim, review, maps, cache, or payment work | `references/listingpro-theme-operations.md` |
+| ListingPro feature, configuration, monetization, import, claim, review, maps, cache, or payment work | `references/listingpro-theme-operations.md`, then `references/listingpro-feature-catalog.md` |
+| Bulk import / CSV / WP All Import work | `references/bulk-import-addon.md` |
+| Licensing or redistribution questions about theme/plugin files | `references/licensing.md` |
 | Writing copy, handoffs, documentation, partner emails, internal notes, or reports | `references/editorial-standards.md` |
 | Delegating work to another Claude session, Manus, a browser operator, or a developer | `templates/handoff-brief.md` |
+| Building or extending automation that reads/writes ListingPro listing data | `plugin/campus-sparbuch-toolkit/README.md` |
 
 ## Operating principles
 
@@ -34,7 +37,7 @@ Protect the business model. Campus Sparbuch uses an internal curation model, not
 
 1. **Load context.** Read `references/project-context.md` and identify the active phase, blockers, constraints, and acceptance criteria.
 2. **Inspect before editing.** Use `wp option get`, `wp post list`, `wp term list`, `wp plugin list`, `wp theme list`, `wp eval`, filesystem grep, or database inspection to confirm current state.
-3. **Prefer child-theme and scripts.** Put durable PHP/CSS/JS changes in the child theme or a controlled project plugin. Put repeatable configuration in Bash/WP-CLI scripts with the Local WP wrapper.
+3. **Prefer child-theme and scripts.** Put durable PHP/CSS/JS changes in the child theme or the bundled `plugin/campus-sparbuch-toolkit` project plugin (see `plugin/campus-sparbuch-toolkit/README.md`) — extend it rather than writing one-off `wp eval` snippets for recurring listing-data operations. Put repeatable configuration in Bash/WP-CLI scripts with the Local WP wrapper.
 4. **Keep scripts idempotent.** Re-running a script must not create duplicate terms, packages, pages, options, or users. Use lookup-before-create logic.
 5. **Respect browser-only boundaries.** SMTP password, logo/favicon, Google Maps API key, social-login keys, Complianz wizard, and Rank Math wizard require browser/admin work.
 6. **Verify output.** After implementation, check database state, admin-visible objects, frontend behavior where possible, and error logs.
