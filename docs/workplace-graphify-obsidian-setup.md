@@ -120,6 +120,27 @@ greifen, wenn Claude Code im Vault arbeitet.
 - Graphify niemals über den kompletten Workspace laufen lassen - immer auf
   einen begrenzten Code-Root zeigen.
 
+### Technisch erzwungener Safety Guard (`scripts/setup-graphify-workplace.sh`)
+
+`guard_forbidden_path()` im Setup-Skript lehnt `--code-root`, `--vault` und
+`--workspace-root` automatisch ab, wenn der (normalisierte) Pfad einem dieser
+Ordnernamen entspricht oder darunter liegt:
+
+```text
+30_PRIVAT
+PRIVAT
+20_FIRMEN_FINANZEN_RECHT
+50_MEDIEN_ASSETS
+70_ARCHIV_INDEX
+10_AKTIV
+```
+
+Wird zusätzlich `--workspace-root <pfad>` (oder die Umgebungsvariable
+`GRAPHIFY_WORKSPACE_ROOT`) gesetzt, lehnt der Guard auch den Workspace-Root
+selbst als Ziel-/Scan-Root ab - so kann Graphify nicht versehentlich über den
+gesamten Workspace laufen. `10_AKTIV` ist als Sammelordner für Projektanker
+ebenfalls gesperrt (Projektanker sind keine Code-Roots, siehe Abschnitt 4).
+
 ## 7. Umsetzungsplan: Mehrere Agenten (Claude / Codex / Manus) auf demselben Code-Root
 
 Wenn in `60_DEV_AGENTEN_TOOLS/` mehrere Agenten (z.B. Claude Code, Codex,

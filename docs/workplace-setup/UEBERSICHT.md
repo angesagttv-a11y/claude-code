@@ -16,7 +16,8 @@ Gebrauchsanleitung.
 | Multi-Agent-Plan (Claude/Codex/Manus) | ✅ erledigt | `docs/workplace-graphify-obsidian-setup.md` (Abschnitt 7) |
 | Lauffähiges Setup-Skript | ✅ erledigt | `scripts/setup-graphify-workplace.sh` |
 | Templates (`.graphifyignore`, `PROJEKT.md`, Vault-Übersicht) | ✅ erledigt | `docs/workplace-setup/templates/` |
-| Skript getestet (Syntax, Dry-Run, Privacy-Guard, Idempotenz) | ✅ erledigt | in dieser Sandbox |
+| Erweiterter Safety Guard (6 gesperrte Bereiche + Workspace-Root) | ✅ erledigt | `scripts/setup-graphify-workplace.sh` (`guard_forbidden_path`) |
+| Skript getestet (Syntax, Dry-Run, erweiterter Guard, Idempotenz) | ✅ erledigt | in dieser Sandbox |
 | **Ausführung auf deinem echten Mac/Workplace** | ❌ **noch offen** | siehe Abschnitt 4 |
 | Graphify tatsächlich auf einen Code-Root laufen lassen (`/graphify .`) | ❌ noch offen | dein Mac |
 | Obsidian-Vault in Obsidian geöffnet/initialisiert (`.obsidian/`) | ❌ noch offen | dein Mac |
@@ -105,21 +106,27 @@ Skript passieren**, sonst bricht das Skript beim Vault-Schritt ab.
 ### Schritt 3: Dry-Run gegen einen Code-Root
 
 Wähle ein Projekt aus `60_DEV_AGENTEN_TOOLS/`, z.B. dein Codex-Projekt.
+Mit `--workspace-root` aktivierst du zusätzlich den Schutz "Workspace-Root
+selbst darf kein Ziel sein" (siehe Abschnitt 5):
 
 ```bash
 ./scripts/setup-graphify-workplace.sh \
+    --workspace-root "$HOME/Workplace" \
     --vault     "$HOME/Workplace/Obsidian" \
     --code-root "$HOME/Workplace/60_DEV_AGENTEN_TOOLS/<dein-projekt>" \
     --platform claude --platform codex \
     --dry-run
 ```
 
-Prüfe die Ausgabe - sie zeigt jeden Schritt, ohne etwas zu schreiben.
+Prüfe die Ausgabe - sie zeigt jeden Schritt, ohne etwas zu schreiben. Zeigt
+`--code-root` oder `--vault` auf einen gesperrten Bereich (siehe Abschnitt 5),
+bricht das Skript sofort mit `ABBRUCH: ...` ab.
 
 ### Schritt 4: Echt ausführen
 
 ```bash
 ./scripts/setup-graphify-workplace.sh \
+    --workspace-root "$HOME/Workplace" \
     --vault     "$HOME/Workplace/Obsidian" \
     --code-root "$HOME/Workplace/60_DEV_AGENTEN_TOOLS/<dein-projekt>" \
     --platform claude --platform codex
@@ -176,3 +183,36 @@ Ausführen überschreibt nichts Bestehendes.
 
 Details und Hintergründe stehen in
 [`../workplace-graphify-obsidian-setup.md`](../workplace-graphify-obsidian-setup.md).
+
+## 5. Harte Regeln (Safety Guard im Skript)
+
+`scripts/setup-graphify-workplace.sh` lehnt `--code-root`, `--vault` und
+`--workspace-root` automatisch ab, wenn der Pfad einem dieser Ordnernamen
+entspricht oder darunter liegt - egal an welcher Stelle im Baum:
+
+```text
+30_PRIVAT
+PRIVAT
+20_FIRMEN_FINANZEN_RECHT
+50_MEDIEN_ASSETS
+70_ARCHIV_INDEX
+10_AKTIV
+```
+
+Zusätzlich: Wird `--workspace-root <pfad>` gesetzt (empfohlen, siehe Schritt 3),
+lehnt das Skript auch den Workspace-Root selbst als Ziel-/Scan-Root ab.
+
+Damit gilt technisch erzwungen:
+- Kein Scan auf den gesamten Workspace.
+- Kein Scan auf `10_AKTIV` (Projektanker sind keine Code-Roots).
+- Keine Schreibvorgänge in `30_PRIVAT`, `20_FIRMEN_FINANZEN_RECHT`,
+  `50_MEDIEN_ASSETS`, `70_ARCHIV_INDEX`.
+- `graphify-out/` bleibt projektlokal im jeweiligen Code-Root.
+- Obsidian erhält nur kuratierte Inhalte bzw. kontrollierte Exporte in
+  explizit angegebene Zielordner (`--obsidian-dir`).
+
+Getestet (in dieser Sandbox, mit anonymisierter Beispielstruktur): erlaubter
+Code-Root läuft im Dry-Run durch; alle acht gesperrten Pfade
+(Workspace-Root, `10_AKTIV`, `30_PRIVAT`, `30_PRIVAT/Test`,
+`20_FIRMEN_FINANZEN_RECHT`, `20_FIRMEN_FINANZEN_RECHT/Test`,
+`50_MEDIEN_ASSETS`, `70_ARCHIV_INDEX`) brechen mit `ABBRUCH: ...` ab.

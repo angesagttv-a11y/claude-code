@@ -27,10 +27,22 @@ TEMPLATE_DIR="$REPO_ROOT/docs/workplace-setup/templates"
 # --- Defaults --------------------------------------------------------------
 VAULT_ROOT=""
 CODE_ROOT=""
+WORKSPACE_ROOT="${GRAPHIFY_WORKSPACE_ROOT:-}"
 PLATFORMS=()
 DO_INSTALL_GRAPHIFY=1
 DO_OBSIDIAN_SKILLS=1
 DRY_RUN=0
+
+# Ordnernamen (Basename), die niemals als --code-root oder --vault verwendet
+# werden dürfen, egal an welcher Stelle im Workspace sie liegen.
+FORBIDDEN_BASENAMES=(
+  "30_PRIVAT"
+  "PRIVAT"
+  "20_FIRMEN_FINANZEN_RECHT"
+  "50_MEDIEN_ASSETS"
+  "70_ARCHIV_INDEX"
+  "10_AKTIV"
+)
 
 usage() {
   cat <<'EOF'
@@ -38,6 +50,10 @@ Usage: setup-graphify-workplace.sh [Optionen]
 
   --vault <pfad>         Wurzel des Obsidian-Vaults (z.B. .../Workplace/Obsidian)
   --code-root <pfad>     Code-Root, auf den Graphify zeigen soll (Git-Repo o.ä.)
+  --workspace-root <pfad> Wurzel des Gesamt-Workspace (z.B. .../Workplace).
+                         Wird selbst als Ziel/Scan-Root abgelehnt. Kann auch
+                         über die Umgebungsvariable GRAPHIFY_WORKSPACE_ROOT
+                         gesetzt werden.
   --platform <name>      Agenten-Plattform für graphify install (mehrfach erlaubt:
                          claude, codex, gemini, cursor, windows, kiro, devin, ...)
                          Default: claude
@@ -47,7 +63,14 @@ Usage: setup-graphify-workplace.sh [Optionen]
   -h, --help             Diese Hilfe
 
 Sicherheit:
-  - Pfade, die '30_PRIVAT' oder 'PRIVAT' enthalten, werden abgelehnt.
+  - Folgende Ordnernamen werden als --code-root/--vault/--workspace-root
+    IMMER abgelehnt (egal wo sie im Baum liegen):
+      30_PRIVAT, PRIVAT, 20_FIRMEN_FINANZEN_RECHT, 50_MEDIEN_ASSETS,
+      70_ARCHIV_INDEX, 10_AKTIV
+  - Pfade UNTERHALB von 30_PRIVAT/, 20_FIRMEN_FINANZEN_RECHT/,
+    50_MEDIEN_ASSETS/ oder 70_ARCHIV_INDEX/ werden ebenfalls abgelehnt.
+  - Wird --workspace-root angegeben, wird zusätzlich der Workspace-Root
+    selbst als --code-root/--vault abgelehnt.
   - Bestehende Dateien werden NICHT überschrieben (idempotent).
 EOF
 }
@@ -57,6 +80,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --vault)              VAULT_ROOT="${2:-}"; shift 2 ;;
     --code-root)          CODE_ROOT="${2:-}"; shift 2 ;;
+    --workspace-root)     WORKSPACE_ROOT="${2:-}"; shift 2 ;;
     --platform)           PLATFORMS+=("${2:-}"); shift 2 ;;
     --skip-graphify)      DO_INSTALL_GRAPHIFY=0; shift ;;
     --skip-obsidian-skills) DO_OBSIDIAN_SKILLS=0; shift ;;
@@ -79,13 +103,56 @@ run()  {
   fi
 }
 
-guard_private() {
-  # Verhindert versehentliches Anlegen in sensiblen Bereichen.
+# Best-effort absoluter, normalisierter Pfad - auch für (noch) nicht
+# existierende Pfade. Fällt auf den Eingabewert zurück, falls python3 fehlt.
+_normalize_path() {
   local p="$1"
-  if [[ "$p" == *30_PRIVAT* || "$p" == *PRIVAT* ]]; then
-    echo "ABBRUCH: Pfad '$p' wirkt privat (30_PRIVAT). Bitte explizit anderen Pfad wählen." >&2
+  if command -v python3 >/dev/null 2>&1; then
+    python3 - "$p" <<'PY'
+import os, sys
+print(os.path.abspath(os.path.expanduser(sys.argv[1])))
+PY
+  else
+    printf '%s\n' "$p"
+  fi
+}
+
+guard_forbidden_path() {
+  # Lehnt gesperrte Bereiche (privat, rechtlich/finanziell, Medien, Archiv,
+  # Projektanker-Sammelordner, Workspace-Root) als Ziel-/Scan-Pfad ab.
+  local p="$1"
+  if [[ -z "$p" ]]; then
+    echo "ABBRUCH: leerer Pfad ist nicht erlaubt." >&2
     exit 1
   fi
+
+  local normalized
+  normalized="$(_normalize_path "$p")"
+
+  if [[ -n "$WORKSPACE_ROOT" ]]; then
+    local ws_normalized
+    ws_normalized="$(_normalize_path "$WORKSPACE_ROOT")"
+    if [[ "$normalized" == "$ws_normalized" ]]; then
+      echo "ABBRUCH: Workspace-Root selbst darf nicht als Ziel-/Scan-Root verwendet werden: $normalized" >&2
+      exit 1
+    fi
+  fi
+
+  local base
+  base="$(basename "$normalized")"
+  for forbidden in "${FORBIDDEN_BASENAMES[@]}"; do
+    if [[ "$base" == "$forbidden" ]]; then
+      echo "ABBRUCH: Pfad zeigt auf einen gesperrten Bereich ('$forbidden'): $normalized" >&2
+      exit 1
+    fi
+  done
+
+  case "$normalized" in
+    */30_PRIVAT/*|*/PRIVAT/*|*/20_FIRMEN_FINANZEN_RECHT/*|*/50_MEDIEN_ASSETS/*|*/70_ARCHIV_INDEX/*|*/10_AKTIV/*)
+      echo "ABBRUCH: Pfad liegt innerhalb eines gesperrten Bereichs: $normalized" >&2
+      exit 1
+      ;;
+  esac
 }
 
 copy_if_absent() {
@@ -116,7 +183,7 @@ if [[ "$DO_INSTALL_GRAPHIFY" -eq 1 ]]; then
   for plat in "${PLATFORMS[@]}"; do
     step "graphify install für Plattform: $plat"
     if [[ -n "$CODE_ROOT" ]]; then
-      guard_private "$CODE_ROOT"
+      guard_forbidden_path "$CODE_ROOT"
       run "(cd \"$CODE_ROOT\" && graphify install --project --platform \"$plat\")"
     else
       run "graphify install --platform \"$plat\""
@@ -126,7 +193,7 @@ fi
 
 # --- 2. .graphifyignore in den Code-Root ----------------------------------
 if [[ -n "$CODE_ROOT" ]]; then
-  guard_private "$CODE_ROOT"
+  guard_forbidden_path "$CODE_ROOT"
   step "Code-Root vorbereiten: $CODE_ROOT"
   if [[ ! -d "$CODE_ROOT" ]]; then
     run "mkdir -p \"$CODE_ROOT\""
@@ -138,7 +205,7 @@ fi
 
 # --- 3. Obsidian-Skills in den Vault --------------------------------------
 if [[ -n "$VAULT_ROOT" ]]; then
-  guard_private "$VAULT_ROOT"
+  guard_forbidden_path "$VAULT_ROOT"
   step "Obsidian-Vault vorbereiten: $VAULT_ROOT"
   if [[ ! -d "$VAULT_ROOT" ]]; then
     echo "ABBRUCH: Vault-Pfad '$VAULT_ROOT' existiert nicht. Lege den Vault erst in Obsidian an." >&2
