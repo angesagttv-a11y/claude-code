@@ -1,6 +1,28 @@
 # Installation: listingpro-wordpress-portal-master
 
-## Persönliche Installation in Claude Code
+## Quickstart (Install-Skript)
+
+```bash
+# 1) Skill-Repo holen (einmalig)
+git clone https://github.com/angesagttv-a11y/claude-code.git ~/Downloads/claude-code-skill
+cd ~/Downloads/claude-code-skill
+
+# 2) Skill personal installieren (landet in ~/.claude/skills/)
+chmod +x install-listingpro-skill.sh
+./install-listingpro-skill.sh
+
+# 3) In dein Campus-Sparbuch-Projekt wechseln und Claude Code starten
+cd "/Users/jessenikoi/Local Sites/campus-sparbuch-dev/app/public"
+claude
+```
+
+`install-listingpro-skill.sh` kopiert den Skill standardmäßig nach `~/.claude/skills/listingpro-wordpress-portal-master`. Für eine projektbezogene Installation kann ein abweichendes Zielverzeichnis als erstes Argument übergeben werden:
+
+```bash
+./install-listingpro-skill.sh "/Users/jessenikoi/Local Sites/campus-sparbuch-dev/app/public/.claude/skills/listingpro-wordpress-portal-master"
+```
+
+## Persönliche Installation in Claude Code (manuell)
 
 Kopiere den Ordner `listingpro-wordpress-portal-master` nach:
 
