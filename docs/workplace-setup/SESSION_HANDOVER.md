@@ -1,5 +1,11 @@
 # Projekt-Kontext: Graphify + Obsidian + Claude Code im Workplace
-**Datum der Sitzung:** 2026-06-13 (Update; ursprünglich 2026-06-10)
+**Datum der Sitzung:** 2026-06-13 (2. Update; ursprünglich 2026-06-10)
+
+**TL;DR für die nächste Sitzung:** Der erste Graphify-Lauf war heute
+**erfolgreich** (auf dem `claude-code`-Tooling-Repo selbst, da kein anderes
+Git-Repo im Workplace existiert). Pipeline funktioniert komplett. Morgen:
+**Praxistest** — Obsidian-Export ausprobieren, Graph als Kontext nutzen,
+ggf. ein echtes Projekt als zweites Git-Repo anlegen. Siehe Abschnitt 5.
 
 ## 1. Übergeordnetes Ziel
 
@@ -140,6 +146,35 @@ Chronologisch (diese und vorherige, zusammengefasste Sitzung):
     "Local") bleibt getrennt/privat. Bat um Vorbereitung einer
     Session-Übergabe für die lokale Mac-Umgebung — dieses Dokument wurde
     entsprechend aktualisiert.
+19. **Lokale Mac-Session durchgeführt** (Claude Code v2.1.87, Sonnet 4.6):
+    - Repo erfolgreich nach
+      `/Users/jessenikoi/Workplace/60_DEV_AGENTEN_TOOLS/02_Claude/claude-code`
+      geklont, Branch `claude/graphify-install-setup-5y5u3r` ausgecheckt.
+    - `10_AKTIV/01_Campus_Sparbuch/06_WP_LISTINGPRO_REVIEW_24C` geprüft:
+      **kein** `.git`, keine Code-Dateien (nur zwei Desktop-Sammelordner) →
+      ungeeignet als Code-Root.
+    - Git-Repo-Suche unter `60_DEV_AGENTEN_TOOLS/` und `10_AKTIV/`: einziger
+      Treffer im gesamten Workplace ist
+      `60_DEV_AGENTEN_TOOLS/02_Claude/claude-code` selbst.
+    - Nutzer entschied (pragmatisch, von mir empfohlen): ersten Test mit
+      diesem Repo als Code-Root durchführen (so wie ursprünglich von
+      Dokument A/B vorgeschlagen — die "Ausweich"-Idee aus Schritt 13/15
+      ließ sich nicht umsetzen, da kein zweites Git-Repo existiert).
+    - **Dry-Run** ✅, **echter Lauf** ✅ (`graphify install` für `claude` +
+      `codex`, `.graphifyignore` war schon vorhanden).
+    - **`/graphify .`** vollständig durchgelaufen: 245 Dateien (82 neu, 162
+      aus Cache), 4 parallele Extraktions-Subagenten, Ergebnis:
+      **1.062 Nodes, 1.383 Edges, 116 Communities**. `graph.html`,
+      `GRAPH_REPORT.md`, `graph.json` aktualisiert unter
+      `60_DEV_AGENTEN_TOOLS/02_Claude/claude-code/graphify-out/` (nur lokal,
+      nicht im Git-Repo — by design).
+    - Hinweis erhalten: lokale Session zeigt wiederholt
+      `PostToolUse:*: hook error` nach Tool-Aufrufen — wirkt nicht
+      blockierend, Ursache (vermutlich ein Hook in `.claude/settings.json`)
+      noch nicht untersucht.
+    - Schritte 9/10 (lokale Übersichtsdatei, Abnahmeprotokoll) bewusst auf
+      morgen verschoben — Kernziel (Pipeline funktioniert end-to-end) ist
+      erreicht.
 
 ## 3. Wichtige Entscheidungen & Festlegungen
 
@@ -162,12 +197,24 @@ Chronologisch (diese und vorherige, zusammengefasste Sitzung):
 - Diese Sandbox hat **keinen Zugriff** auf `/Users/jessenikoi/Workplace`
   (isolierte Cloud-Umgebung).
 
+**Fakten (neu, aus der lokalen Sitzung vom 2026-06-13):**
+- Repo ist geklont unter
+  `/Users/jessenikoi/Workplace/60_DEV_AGENTEN_TOOLS/02_Claude/claude-code`,
+  Branch `claude/graphify-install-setup-5y5u3r`, läuft lokal mit
+  Claude Code v2.1.87 (Sonnet 4.6).
+- `graphify` ist installiert (`/Users/jessenikoi/.local/bin/graphify`),
+  `graphify install` für `claude` + `codex` ausgeführt.
+- **Im gesamten Workplace existiert aktuell nur EIN Git-Repo:**
+  `60_DEV_AGENTEN_TOOLS/02_Claude/claude-code`. Weder unter `10_AKTIV/` noch
+  sonst irgendwo wurde ein `.git`-Ordner gefunden (Stand 2026-06-13).
+- `/graphify .` auf diesem Repo ergab: 1.062 Nodes, 1.383 Edges,
+  116 Communities; `graphify-out/{graph.html,GRAPH_REPORT.md,graph.json}`
+  liegen lokal vor (nicht im Git-Repo, by design).
+
 **Annahmen / unbestätigt (Stand letzter Audit, evtl. veraltet):**
 - `.obsidian/` existiert in `Obsidian/` noch nicht (zuletzt geprüft: nicht
   vorhanden) — muss vor Vault-Skill-Installation einmal in Obsidian-App
-  geöffnet werden.
-- Es wurden zuletzt keine `graphify-out/`, `graph.html`, `GRAPH_REPORT.md`,
-  `graph.json` irgendwo im Workplace gefunden.
+  geöffnet werden. **In der heutigen Sitzung nicht erneut geprüft.**
 - Nur ein `.claude`-Ordner gefunden, unter `30_PRIVAT/.claude/` — explizit
   **nicht** als globaler Standard verwenden.
 
@@ -193,13 +240,17 @@ vorgeschlagen und nicht widersprochen):**
   `--workspace-root`.
 - Neuer optionaler Parameter `--workspace-root` / Env `GRAPHIFY_WORKSPACE_ROOT`:
   blockiert den Workspace-Root selbst als Ziel/Scan-Root.
-- **(Überholt durch Schritt 13)** Dokument A/B schlug ursprünglich vor, den
-  ersten Test-Code-Root auf dieses Setup-Repo selbst
-  (`60_DEV_AGENTEN_TOOLS/02_Claude/claude-code`) zu legen. **Entschieden:**
-  Stattdessen ein echtes Arbeitsprojekt verwenden.
-- **Neuer Kandidat für ersten Code-Root (unverifiziert):**
+- **(Überholt durch Schritt 13, dann durch Schritt 19 final entschieden)**
+  Dokument A/B schlug ursprünglich vor, den ersten Test-Code-Root auf dieses
+  Setup-Repo selbst (`60_DEV_AGENTEN_TOOLS/02_Claude/claude-code`) zu legen.
+  Schritt 13 wollte stattdessen ein echtes Arbeitsprojekt verwenden — aber
+  da im gesamten Workplace kein zweites Git-Repo existiert (siehe Fakten
+  oben), wurde **final doch dieses Repo als erster Code-Root verwendet**,
+  mit Erfolg (1.062 Nodes / 1.383 Edges).
+- **Erledigt:**
   `/Users/jessenikoi/Workplace/10_AKTIV/01_Campus_Sparbuch/06_WP_LISTINGPRO_REVIEW_24C`
-  — muss lokal geprüft werden (Code-Dateien + `.git`-Ordner vorhanden?).
+  wurde geprüft — **kein** `.git`, keine Code-Dateien. Ungeeignet, kein
+  weiterer Bedarf, diesen Pfad zu prüfen.
 - **`~/Local Sites/...` (App "Local", WordPress-Staging) bleibt
   unangetastet** — wird nicht verschoben, nicht als Code-Root verwendet,
   nicht Teil von `Workplace`. Grund: "Local" verwaltet seine Site-Pfade
@@ -236,69 +287,80 @@ Im Branch `claude/graphify-install-setup-5y5u3r` (gepusht, kein PR):
   `20_FIRMEN_FINANZEN_RECHT/Test`, `50_MEDIEN_ASSETS`, `70_ARCHIV_INDEX`) —
   alle 9/9 wie erwartet ✅
 
-**Noch NICHT erledigt (alles auf dem Mac, Stand: gerade erst begonnen):**
-- Repo nach `/Users/jessenikoi/Workplace/60_DEV_AGENTEN_TOOLS/02_Claude/claude-code`
-  geklont — **noch nicht passiert** (letzter Versuch des Nutzers schlug
-  fehl, weil Klon-Schritt übersprungen wurde; Klon-Befehl wurde
-  bereitgestellt, aber Ausführung nicht bestätigt).
-- `graphify` auf dem Mac installiert (`uv tool install graphifyy`) —
-  unbekannt/offen.
-- `.obsidian/` im Vault initialisiert — unbekannt/offen.
-- Erster `--dry-run` lokal erfolgreich durchgeführt — offen.
-- Echter Lauf des Setup-Skripts — offen.
-- `/graphify .` in einem Code-Root — offen.
-- Optionaler Obsidian-Export — offen.
+**Auf dem Mac erledigt (Sitzung vom 2026-06-13):**
+- ✅ Repo geklont nach `60_DEV_AGENTEN_TOOLS/02_Claude/claude-code`, Branch
+  ausgecheckt.
+- ✅ `graphify` installiert, `command -v graphify` funktioniert.
+- ✅ Dry-Run von `setup-graphify-workplace.sh` erfolgreich.
+- ✅ Echter Lauf erfolgreich (`graphify install` für `claude` + `codex`).
+- ✅ `/graphify .` erfolgreich: 1.062 Nodes, 1.383 Edges, 116 Communities,
+  `graphify-out/{graph.html,GRAPH_REPORT.md,graph.json}` vorhanden.
+
+**Noch NICHT erledigt:**
+- `.obsidian/` im Vault initialisiert — Status unbekannt, nicht in dieser
+  Sitzung geprüft.
+- `AGENTS.md` / `00_STEUERUNG/HAUPTINDEX.md` im Workplace-Root gelesen —
+  noch nicht geschehen (Schritt 2 aus Abschnitt 5, alte Zählung).
+- Optionaler Obsidian-Export (`--obsidian --obsidian-dir ...`) — offen,
+  geplant für morgigen Praxistest.
 - Lokale Übersichtsdatei
   `60_DEV_AGENTEN_TOOLS/02_Claude/Graphify_Obsidian_Setup/UEBERSICHT_GRAPHIFY_OBSIDIAN.md`
-  (laut Dokument A/B Abschnitt 15) — offen.
+  (laut Dokument A/B Abschnitt 15) — bewusst auf morgen verschoben.
+- Abnahmeprotokoll (Dokument B Abschnitt 16) — bewusst auf morgen
+  verschoben.
+- Untersuchung der wiederholten `PostToolUse:*: hook error`-Meldungen in
+  der lokalen Session — nicht blockierend, aber noch nicht angeschaut.
+- Zweites Git-Repo für ein "echtes" Arbeitsprojekt anlegen/initialisieren
+  (falls für den Praxistest gewünscht) — offen.
 
-## 5. Nächste Schritte (Offene Punkte)
+## 5. Nächste Schritte (Praxistest, geplant für die nächste Sitzung)
 
-**Empfohlene konkrete Reihenfolge für die nächste (lokale) Sitzung:**
+Die technische Grundinstallation ist **abgeschlossen und erfolgreich
+getestet** (siehe Abschnitt 2, Schritt 19, und Abschnitt 4). Die nächste
+Sitzung ist ein **Praxistest**: funktioniert das Setup auch im echten
+Alltag (Obsidian, mehrere Tools, echtes Projekt)?
 
-1. **Repo klonen** (Befehl liegt bereit, siehe Abschnitt 6) nach
-   `/Users/jessenikoi/Workplace/60_DEV_AGENTEN_TOOLS/02_Claude/claude-code`,
-   Branch `claude/graphify-install-setup-5y5u3r` auschecken.
-2. `AGENTS.md` und `00_STEUERUNG/HAUPTINDEX.md` im Workplace-Root lesen
-   (Dokument A/B, Abschnitt 1/2 — noch nicht geschehen).
-3. **Code-Root verifizieren:** prüfen, ob
-   `10_AKTIV/01_Campus_Sparbuch/06_WP_LISTINGPRO_REVIEW_24C` Code-Dateien
-   (`.php`/`.js`/`.css` etc.) und einen `.git`-Ordner enthält. Falls ja →
-   das ist der erste Code-Root (Pfad in den Befehlen aus Abschnitt 6
-   entsprechend anpassen, statt `claude-code`). Falls nein → gemeinsam den
-   tatsächlichen Code-Repo-Pfad für dieses Projekt suchen.
-4. `.obsidian/` prüfen; falls fehlend, Nutzer bittet, den Vault einmal in
-   der Obsidian-App zu öffnen.
-5. `uv --version` und `command -v graphify` prüfen; falls fehlend,
-   `uv tool install graphifyy`.
-6. Dry-Run des gehärteten Skripts mit `--workspace-root` und dem
-   **verifizierten Code-Root aus Schritt 3** ausführen (Befehl in
-   Abschnitt 6 als Vorlage), Ausgabe prüfen.
-7. Bei sauberem Dry-Run: echten Lauf ausführen.
-8. `/graphify .` im gewählten Code-Root ausführen, `graphify-out/` prüfen.
-9. Lokale Übersichtsdatei gemäß Dokument A/B Abschnitt 15 anlegen.
-10. Abnahmeprotokoll (Tabelle aus Dokument B Abschnitt 16) an Jesse
-    zurückmelden.
+**Empfohlene Reihenfolge für die nächste (lokale) Sitzung:**
 
-**Meine Empfehlung (aktive Handlungsempfehlung, keine bloße Option):**
-Schritt 1 (Repo klonen) zuerst und isoliert ausführen lassen, **bevor**
-irgendetwas anderes versucht wird — das war der Fehler im letzten Versuch.
-Direkt danach Schritt 3 (Code-Root verifizieren), denn Schritt 6/7 hängen
-vom Ergebnis ab. **Wichtig:** `~/Local Sites/...` (App "Local") wird in
-keinem Schritt angefasst — das ist bewusst kein Teil dieses Setups.
+1. **Graph anschauen:** `graphify-out/graph.html` im Browser öffnen,
+   `GRAPH_REPORT.md` von Claude zusammenfassen lassen — macht der Graph
+   inhaltlich Sinn?
+2. **`.obsidian/`-Status klären:** prüfen, ob `Obsidian/.obsidian/`
+   existiert. Falls nicht: Vault einmal in der Obsidian-App öffnen, dann
+   `--skip-obsidian-skills` weglassen und das Setup-Skript erneut laufen
+   lassen (idempotent — bestehende Dateien werden nicht überschrieben).
+3. **Optionaler Obsidian-Export testen:**
+   `/graphify . --obsidian --obsidian-dir <Vault>/10_PROJEKTE/<Projekt>`
+   (genauen Parameter-Namen vorher mit `graphify --help` / Skill-Doku
+   gegenprüfen) — prüfen, ob kuratierte Notizen im Vault ankommen.
+4. **`AGENTS.md` / `00_STEUERUNG/HAUPTINDEX.md`** im Workplace-Root lesen
+   lassen (noch offen aus der Erstanleitung).
+5. **Zweites Repo / echtes Projekt (optional):** Falls Jesse ein echtes
+   Arbeitsprojekt als Code-Root nutzen will, muss dafür zuerst ein
+   `.git`-Repo angelegt/initialisiert werden (`git init` in einem
+   Projektordner unter `60_DEV_AGENTEN_TOOLS/`). Dann denselben Ablauf
+   (Dry-Run → echter Lauf → `/graphify .`) mit `--code-root <neuer Pfad>`
+   wiederholen.
+6. **Hook-Fehler untersuchen (optional, niedrige Priorität):**
+   `.claude/settings.json` auf PostToolUse-Hooks prüfen, die die
+   wiederholten `hook error`-Meldungen verursachen.
+7. **Abschluss-Doku (Schritte 9/10 aus der vorherigen Zählung):** lokale
+   Übersichtsdatei + Abnahmeprotokoll — falls gewünscht, am Ende der
+   nächsten Sitzung.
 
-**Offene Rückfragen an Jesse (Unsicherheiten, die ich nicht selbst auflösen
-kann):**
+**Meine Empfehlung:** Schritt 1+2 zuerst (kurz, klärt ob Obsidian-Teil
+überhaupt nötig ist), dann je nach Ergebnis Schritt 3. Schritt 5 (echtes
+Projekt als zweites Repo) nur, wenn Jesse das explizit will — ist kein
+Blocker für "funktioniert das Setup grundsätzlich".
 
-1. **`06_WP_LISTINGPRO_REVIEW_24C` verifizieren:** Enthält dieser Ordner
-   tatsächlich Code-Dateien und einen `.git`-Ordner? (Noch nicht geprüft —
-   das ist der einzige Blocker für Schritt 6/7.)
-2. **Aktueller Stand `.obsidian/`:** Ist der Vault inzwischen in Obsidian
-   geöffnet worden (seit dem letzten Audit)? Falls ja, kann Schritt 4 in
-   Abschnitt 5 übersprungen werden.
-3. **`--platform codex`:** Soll Codex tatsächlich denselben Code-Root
-   verwenden wie Claude (dann macht `--platform claude --platform codex`
-   im selben Lauf Sinn), oder arbeitet Codex an einem anderen Projekt
+**Offene Rückfragen an Jesse:**
+
+1. **Echtes Projekt als zweiter Code-Root:** Gibt es ein Arbeitsprojekt,
+   das Jesse als Git-Repo unter `60_DEV_AGENTEN_TOOLS/` anlegen möchte, um
+   Graphify darauf laufen zu lassen? Oder reicht für jetzt das
+   `claude-code`-Repo als Dauer-Testobjekt?
+2. **`--platform codex`:** Soll Codex tatsächlich denselben Code-Root
+   verwenden wie Claude, oder arbeitet Codex an einem anderen Projekt
    (dann separater Lauf mit eigenem `--code-root` sinnvoller)?
 
 ## 6. Relevanter Code / Rohdaten
