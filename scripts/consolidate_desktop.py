@@ -97,11 +97,12 @@ def main():
         manifest.append(f"- {action.upper()}: `{src.name}` → `{dst.relative_to(W)}`")
         if dry:
             return
-        dst.parent.mkdir(parents=True, exist_ok=True)
         if action == "copy":
-            # cp -Rc: APFS-Clone (sofort, kein Extra-Platz, sparse-sicher)
-            subprocess.run(["cp", "-Rc", str(src), str(dst)], check=True)
+            # rsync -aS: sparse-sicher (bläht Sparse-Files NICHT auf, anders als cp).
+            dst.mkdir(parents=True, exist_ok=True)
+            subprocess.run(["rsync", "-aS", f"{src}/", f"{dst}/"], check=True)
         elif action == "move":
+            dst.parent.mkdir(parents=True, exist_ok=True)
             subprocess.run(["mv", str(src), str(dst)], check=True)
 
     # --- Ordner ---
