@@ -11,15 +11,15 @@ cd ~/Downloads/claude-code-skill
 chmod +x install-listingpro-skill.sh
 ./install-listingpro-skill.sh
 
-# 3) In dein Campus-Sparbuch-Projekt wechseln und Claude Code starten
-cd "/Users/jessenikoi/Local Sites/campus-sparbuch-dev/app/public"
+# 3) In dein Projekt wechseln und Claude Code starten
+cd "<dein-projektpfad>"  # z.B. "/Users/jessenikoi/Local Sites/campus-sparbuch-dev/app/public"
 claude
 ```
 
 `install-listingpro-skill.sh` kopiert den Skill standardmäßig nach `~/.claude/skills/listingpro-wordpress-portal-master`. Für eine projektbezogene Installation kann ein abweichendes Zielverzeichnis als erstes Argument übergeben werden:
 
 ```bash
-./install-listingpro-skill.sh "/Users/jessenikoi/Local Sites/campus-sparbuch-dev/app/public/.claude/skills/listingpro-wordpress-portal-master"
+./install-listingpro-skill.sh "<dein-projektpfad>/.claude/skills/listingpro-wordpress-portal-master"
 ```
 
 ## Persönliche Installation in Claude Code (manuell)
