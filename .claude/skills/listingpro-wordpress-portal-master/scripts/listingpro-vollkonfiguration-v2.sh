@@ -71,8 +71,12 @@ wp plugin list
 echo
 
 BACKUP_FILE="listingpro_options_before_$(date +%Y%m%d_%H%M%S).json"
-wp option get listingpro_options --format=json > "$BACKUP_FILE"
-echo "Backup geschrieben: $BACKUP_FILE"
+if wp option get listingpro_options --format=json > "$BACKUP_FILE" 2>/dev/null; then
+  echo "Backup geschrieben: $BACKUP_FILE"
+else
+  rm -f "$BACKUP_FILE"
+  echo "Hinweis: Option 'listingpro_options' existiert noch nicht, kein Backup notwendig."
+fi
 echo
 
 echo "Aktuelle Listings, Pakete, Terms:"
