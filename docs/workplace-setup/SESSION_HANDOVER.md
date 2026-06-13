@@ -1,5 +1,5 @@
 # Projekt-Kontext: Graphify + Obsidian + Claude Code im Workplace
-**Datum der Sitzung:** 2026-06-10
+**Datum der Sitzung:** 2026-06-13 (Update; ursprünglich 2026-06-10)
 
 ## 1. Übergeordnetes Ziel
 
@@ -17,6 +17,23 @@ Obsidian-Vault bekommt nur kuratierte/verdichtete Inhalte. Alle dafür
 nötigen Werkzeuge/Doku liegen versioniert in
 `angesagttv-a11y/claude-code` (Branch `claude/graphify-install-setup-5y5u3r`)
 als privater Backup-/Sync-Mechanismus zwischen Manus, Codex und Claude.
+
+**Erweitertes/langfristiges Ziel (neu, 2026-06-13):** Jesse möchte seinen Mac
+grundsätzlich in zwei klar getrennte Bereiche aufteilen:
+
+- **`Workplace`** = der "reine Arbeitsbereich" für KI-Modelle und deren
+  Tools/Software (Claude Code, Codex, Graphify, Obsidian-Vault,
+  Erinnerungen/Memory-Dateien, Projektanker etc.). Alles, was KI-Agenten
+  lesen/schreiben/strukturieren sollen, soll langfristig **nur** hier
+  liegen.
+- **Restlicher Mac** = privat/getrennt davon. Dazu zählt explizit auch die
+  App **"Local"** (WordPress-Staging, Sites unter `~/Local Sites/...`) —
+  diese bleibt **außerhalb** von `Workplace` und wird **nicht** angefasst
+  oder dorthin verschoben (siehe Abschnitt 3, Festlegungen).
+
+Dieses Handover-Dokument ist explizit dafür gedacht, den Kontext aus der
+Cloud-Sandbox in eine **lokale** Claude-Code-Session auf dem Mac zu
+übergeben, da diese Sandbox keinen Zugriff auf `/Users/jessenikoi/...` hat.
 
 ## 2. Zusammenfassung dieser Sitzung
 
@@ -93,6 +110,36 @@ Chronologisch (diese und vorherige, zusammengefasste Sitzung):
     `/Users/jessenikoi/Workplace/60_DEV_AGENTEN_TOOLS/02_Claude/claude-code`
     geklont werden (Befehl dafür bereitgestellt), danach funktioniert der
     Befehl mit `./scripts/...` relativ zu diesem Verzeichnis.
+13. Nutzer beantwortete offene Frage 1 (aus der vorherigen Version dieses
+    Dokuments): Der **erste** Graphify-Test soll **nicht** über dieses
+    Tooling-Repo selbst laufen, sondern über ein **echtes Arbeitsprojekt**.
+14. Nutzer zeigte per Screenshots seine reale Mac-Ordnerstruktur
+    (Finder: `Workplace`, `10_AKTIV/01_Campus_Sparbuch/06_WP_LISTINGPRO_REVIEW_24C`,
+    Codex-Projektliste, "Local Sites"-Ordner) und fragte, ob/wie
+    `graphify-out/` angelegt wird und wo was liegt.
+15. Geklärt: `graphify-out/` wird **automatisch** durch `/graphify .`
+    erzeugt, nichts muss vorab angelegt werden. Vorschlag: Kandidat für den
+    ersten Code-Root ist `10_AKTIV/01_Campus_Sparbuch/06_WP_LISTINGPRO_REVIEW_24C`
+    (vermutlich der individuelle Theme-/Plugin-Code, getrennt von der
+    WordPress-Grundinstallation) — **noch nicht vom Nutzer verifiziert**
+    (Code-Dateien + `.git` vorhanden?).
+16. Nutzer zeigte per Screenshot, dass Codex auf `handball-campus-local`
+    unter `~/Local Sites/handball-campus-local` zeigt (Git-Repo, Branch
+    `main`) — verwaltet von der App "Local" (WordPress-Staging). Nutzer
+    äußerte das (richtige) Bauchgefühl, dass dieser Ordner nicht der
+    richtige Ort für unser Graphify/Obsidian-Setup ist.
+17. Bestätigt: `~/Local Sites/...` bleibt unverändert (von "Local"
+    verwaltet, nicht verschieben — sonst verliert "Local" die
+    Site-Registrierung). Stattdessen: individueller Code (falls als
+    separates Git-Repo im Workplace vorhanden, z.B.
+    `06_WP_LISTINGPRO_REVIEW_24C`) als Code-Root verwenden — **kein
+    Verschieben von Dateien nötig**.
+18. Nutzer formulierte das langfristige Strukturziel (siehe Abschnitt 1,
+    "Erweitertes/langfristiges Ziel"): `Workplace` = reiner KI-/Tooling-
+    Arbeitsbereich (inkl. "Erinnerungen"/Memory), Rest des Mac (inkl.
+    "Local") bleibt getrennt/privat. Bat um Vorbereitung einer
+    Session-Übergabe für die lokale Mac-Umgebung — dieses Dokument wurde
+    entsprechend aktualisiert.
 
 ## 3. Wichtige Entscheidungen & Festlegungen
 
@@ -146,11 +193,25 @@ vorgeschlagen und nicht widersprochen):**
   `--workspace-root`.
 - Neuer optionaler Parameter `--workspace-root` / Env `GRAPHIFY_WORKSPACE_ROOT`:
   blockiert den Workspace-Root selbst als Ziel/Scan-Root.
-- Erster empfohlener Test-Code-Root laut Dokument A/B:
-  `/Users/jessenikoi/Workplace/60_DEV_AGENTEN_TOOLS/02_Claude/claude-code`
-  (= dieses Setup-Repo selbst). **Hinweis:** Das bedeutet, Graphify würde
-  zuerst auf das Tooling-Repo selbst angewendet, nicht auf ein
-  "richtiges" Projekt — siehe Abschnitt 5, offene Frage 1.
+- **(Überholt durch Schritt 13)** Dokument A/B schlug ursprünglich vor, den
+  ersten Test-Code-Root auf dieses Setup-Repo selbst
+  (`60_DEV_AGENTEN_TOOLS/02_Claude/claude-code`) zu legen. **Entschieden:**
+  Stattdessen ein echtes Arbeitsprojekt verwenden.
+- **Neuer Kandidat für ersten Code-Root (unverifiziert):**
+  `/Users/jessenikoi/Workplace/10_AKTIV/01_Campus_Sparbuch/06_WP_LISTINGPRO_REVIEW_24C`
+  — muss lokal geprüft werden (Code-Dateien + `.git`-Ordner vorhanden?).
+- **`~/Local Sites/...` (App "Local", WordPress-Staging) bleibt
+  unangetastet** — wird nicht verschoben, nicht als Code-Root verwendet,
+  nicht Teil von `Workplace`. Grund: "Local" verwaltet seine Site-Pfade
+  über eine eigene Konfiguration/Datenbank; manuelles Verschieben würde die
+  Site-Registrierung zerstören.
+- **Langfristiges Strukturziel (neu):** `Workplace` soll der einzige Ort
+  sein, an dem KI-Tools (Claude Code, Codex, Graphify, Obsidian, Memory-
+  Dateien) operieren. Übrige Mac-Bereiche (inkl. "Local") bleiben getrennt.
+  Für die aktuelle Aufgabe (ersten Graphify-Lauf durchführen) ist dafür
+  **kein Verschieben von Dateien nötig** — der gewählte Code-Root
+  (`06_WP_LISTINGPRO_REVIEW_24C`, falls verifiziert) liegt bereits innerhalb
+  von `Workplace`.
 
 ## 4. Aktueller Status (Erreichtes)
 
@@ -200,34 +261,40 @@ Im Branch `claude/graphify-install-setup-5y5u3r` (gepusht, kein PR):
    Branch `claude/graphify-install-setup-5y5u3r` auschecken.
 2. `AGENTS.md` und `00_STEUERUNG/HAUPTINDEX.md` im Workplace-Root lesen
    (Dokument A/B, Abschnitt 1/2 — noch nicht geschehen).
-3. `.obsidian/` prüfen; falls fehlend, Nutzer bittet, den Vault einmal in
+3. **Code-Root verifizieren:** prüfen, ob
+   `10_AKTIV/01_Campus_Sparbuch/06_WP_LISTINGPRO_REVIEW_24C` Code-Dateien
+   (`.php`/`.js`/`.css` etc.) und einen `.git`-Ordner enthält. Falls ja →
+   das ist der erste Code-Root (Pfad in den Befehlen aus Abschnitt 6
+   entsprechend anpassen, statt `claude-code`). Falls nein → gemeinsam den
+   tatsächlichen Code-Repo-Pfad für dieses Projekt suchen.
+4. `.obsidian/` prüfen; falls fehlend, Nutzer bittet, den Vault einmal in
    der Obsidian-App zu öffnen.
-4. `uv --version` und `command -v graphify` prüfen; falls fehlend,
+5. `uv --version` und `command -v graphify` prüfen; falls fehlend,
    `uv tool install graphifyy`.
-5. Dry-Run des gehärteten Skripts mit `--workspace-root` ausführen (Befehl
-   in Abschnitt 6), Ausgabe prüfen.
-6. Bei sauberem Dry-Run: echten Lauf ausführen.
-7. `/graphify .` im gewählten Code-Root ausführen, `graphify-out/` prüfen.
-8. Lokale Übersichtsdatei gemäß Dokument A/B Abschnitt 15 anlegen.
-9. Abnahmeprotokoll (Tabelle aus Dokument B Abschnitt 16) an Jesse
-   zurückmelden.
+6. Dry-Run des gehärteten Skripts mit `--workspace-root` und dem
+   **verifizierten Code-Root aus Schritt 3** ausführen (Befehl in
+   Abschnitt 6 als Vorlage), Ausgabe prüfen.
+7. Bei sauberem Dry-Run: echten Lauf ausführen.
+8. `/graphify .` im gewählten Code-Root ausführen, `graphify-out/` prüfen.
+9. Lokale Übersichtsdatei gemäß Dokument A/B Abschnitt 15 anlegen.
+10. Abnahmeprotokoll (Tabelle aus Dokument B Abschnitt 16) an Jesse
+    zurückmelden.
 
 **Meine Empfehlung (aktive Handlungsempfehlung, keine bloße Option):**
 Schritt 1 (Repo klonen) zuerst und isoliert ausführen lassen, **bevor**
 irgendetwas anderes versucht wird — das war der Fehler im letzten Versuch.
-Erst danach Schritt 5/6 (Dry-Run/echter Lauf) angehen.
+Direkt danach Schritt 3 (Code-Root verifizieren), denn Schritt 6/7 hängen
+vom Ergebnis ab. **Wichtig:** `~/Local Sites/...` (App "Local") wird in
+keinem Schritt angefasst — das ist bewusst kein Teil dieses Setups.
 
 **Offene Rückfragen an Jesse (Unsicherheiten, die ich nicht selbst auflösen
 kann):**
 
-1. **Erster Code-Root:** Soll wirklich dieses Setup-Repo selbst
-   (`60_DEV_AGENTEN_TOOLS/02_Claude/claude-code`) der erste Graphify-
-   Test-Code-Root sein (so von Manus/Dokument A/B vorgeschlagen), oder soll
-   stattdessen ein "echtes" Arbeitsprojekt aus `60_DEV_AGENTEN_TOOLS/`
-   genommen werden? Beides ist technisch möglich, aber inhaltlich ein
-   Unterschied (Wissensgraph über das Tooling vs. über ein Arbeitsprojekt).
+1. **`06_WP_LISTINGPRO_REVIEW_24C` verifizieren:** Enthält dieser Ordner
+   tatsächlich Code-Dateien und einen `.git`-Ordner? (Noch nicht geprüft —
+   das ist der einzige Blocker für Schritt 6/7.)
 2. **Aktueller Stand `.obsidian/`:** Ist der Vault inzwischen in Obsidian
-   geöffnet worden (seit dem letzten Audit)? Falls ja, kann Schritt 3 in
+   geöffnet worden (seit dem letzten Audit)? Falls ja, kann Schritt 4 in
    Abschnitt 5 übersprungen werden.
 3. **`--platform codex`:** Soll Codex tatsächlich denselben Code-Root
    verwenden wie Claude (dann macht `--platform claude --platform codex`
@@ -258,7 +325,11 @@ fi
 ls -la docs/workplace-setup/UEBERSICHT.md scripts/setup-graphify-workplace.sh docs/workplace-setup/templates/
 ```
 
-### Dry-Run-Befehl (Schritt 5, nach erfolgreichem Klon, im Repo-Verzeichnis)
+### Dry-Run-Befehl (Schritt 6, nach erfolgreichem Klon + Verifikation, im Repo-Verzeichnis)
+
+Hinweis: `--code-root` zeigt hier auf den **verifizierten Projekt-Code-Root**
+(Schritt 3), NICHT auf den Klon-Pfad des Setup-Repos selbst. Beispiel mit dem
+aktuellen Kandidaten:
 
 ```bash
 chmod +x scripts/setup-graphify-workplace.sh
@@ -266,7 +337,7 @@ chmod +x scripts/setup-graphify-workplace.sh
 ./scripts/setup-graphify-workplace.sh \
   --workspace-root "/Users/jessenikoi/Workplace" \
   --vault "/Users/jessenikoi/Workplace/Obsidian" \
-  --code-root "/Users/jessenikoi/Workplace/60_DEV_AGENTEN_TOOLS/02_Claude/claude-code" \
+  --code-root "/Users/jessenikoi/Workplace/10_AKTIV/01_Campus_Sparbuch/06_WP_LISTINGPRO_REVIEW_24C" \
   --platform claude --platform codex \
   --dry-run
 ```
