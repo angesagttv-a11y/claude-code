@@ -9,6 +9,8 @@ Gebrauchsanleitung.
 
 ## 0. Status: Was ist umgesetzt - und was nicht?
 
+*(Letzter Abgleich: 2026-06-13, siehe `SESSION_HANDOVER_2026-06-13.md` für Details)*
+
 | Was | Status | Wo |
 |---|---|---|
 | Konzept/Hybridmodell dokumentiert | ✅ erledigt | `docs/workplace-graphify-obsidian-setup.md` |
@@ -17,19 +19,24 @@ Gebrauchsanleitung.
 | Lauffähiges Setup-Skript | ✅ erledigt | `scripts/setup-graphify-workplace.sh` |
 | Templates (`.graphifyignore`, `PROJEKT.md`, Vault-Übersicht) | ✅ erledigt | `docs/workplace-setup/templates/` |
 | Erweiterter Safety Guard (6 gesperrte Bereiche + Workspace-Root) | ✅ erledigt | `scripts/setup-graphify-workplace.sh` (`guard_forbidden_path`) |
-| Skript getestet (Syntax, Dry-Run, erweiterter Guard, Idempotenz) | ✅ erledigt | in dieser Sandbox |
-| **Ausführung auf deinem echten Mac/Workplace** | ❌ **noch offen** | siehe Abschnitt 4 |
-| Graphify tatsächlich auf einen Code-Root laufen lassen (`/graphify .`) | ❌ noch offen | dein Mac |
-| Obsidian-Vault in Obsidian geöffnet/initialisiert (`.obsidian/`) | ❌ noch offen | dein Mac |
-| Obsidian-Skills im Vault installiert | ❌ noch offen | dein Mac |
+| Skript getestet (Syntax, Dry-Run, erweiterter Guard, Idempotenz) | ✅ erledigt | in der Sandbox |
+| Skript real ausgeführt (erster Code-Root) | ✅ erledigt (2026-06-13) | `60_DEV_AGENTEN_TOOLS/02_Claude/claude-code` |
+| Graphify auf Code-Root gelaufen (`/graphify .`) | ✅ erledigt (2026-06-13) | 1.062 Nodes, 1.383 Edges, 116 Communities |
+| Graphify-Skill installiert (claude + codex) | ✅ erledigt (2026-06-13) | `.claude/skills/graphify/`, `.codex/skills/graphify/` |
+| `graphify-out/` aus Git ausgeschlossen | ✅ erledigt | `.gitignore` |
+| Obsidian-Vault in Obsidian geöffnet/initialisiert (`.obsidian/`) | ⚠️ **ungeprüft** | dein Mac — noch zu verifizieren |
+| Obsidian-Skills im Vault installiert | ⚠️ **ungeprüft** | dein Mac — noch zu verifizieren |
+| Zweiter Code-Root (echtes Arbeitsprojekt) | ❌ noch offen | `10_AKTIV/` enthält aktuell keine Git-Repos |
+| Obsidian mobile Sync (iPhone) | ⏸️ **bewusst zurückgestellt** | Nutzer-Entscheidung 2026-06-13 |
 | PR auf GitHub erstellt | ⏸️ bewusst nicht gemacht | Repo bleibt privater Backup-/Sync-Mechanismus |
 
-**Kurz gesagt:** Die Planung, Doku und das Werkzeug sind fertig und liegen
-im Branch `claude/graphify-install-setup-5y5u3r`. Die eigentliche
-**Ausführung in deinem echten `Workplace`-Ordner** ist noch nicht passiert -
-das kann ich von hier aus nicht (isolierte Sandbox, kein Zugriff auf deinen
-Mac). Das ist der letzte Schritt, den du (oder eine lokale Claude-Code-Session
-auf deinem Mac) noch machen musst (siehe Abschnitt 4).
+**Kurz gesagt:** Planung, Doku, Werkzeug UND der erste echte Durchlauf sind
+erledigt (Details: `SESSION_HANDOVER_2026-06-13.md`). Offen sind nur noch
+zwei kleine Verifikationen auf dem Mac (`.obsidian/`-Status, Obsidian-Skills)
+sowie optional ein zweiter Code-Root, sobald ein echtes Arbeitsprojekt als
+Git-Repo unter `60_DEV_AGENTEN_TOOLS/` angelegt wird. Diese Prüfungen können
+nur lokal auf dem Mac laufen (isolierte Sandbox hier hat keinen Zugriff auf
+`/Users/jessenikoi/Workplace`).
 
 ## 1. Use-Case: Wofür ist das Ganze?
 
@@ -173,13 +180,17 @@ Ausführen überschreibt nichts Bestehendes.
 
 ## 4. Was als Nächstes ansteht (auf deinem Mac, nicht hier)
 
-1. Repo pullen, Vault in Obsidian öffnen.
-2. Skript einmal mit `--dry-run` gegen ein erstes Projekt aus
-   `60_DEV_AGENTEN_TOOLS/` laufen lassen, Ausgabe prüfen.
-3. Echt ausführen, `.graphifyignore` ggf. anpassen.
-4. `/graphify .` im Code-Root ausführen.
-5. Vault-Übersichtsnotiz aus dem Template anlegen und verlinken.
-6. Bei Bedarf für weitere Projekte/Code-Roots wiederholen.
+Schritte 1-4 (Repo pullen, Skript, `/graphify .`) sind für den ersten
+Code-Root (`claude-code` selbst) bereits erledigt (2026-06-13). Offen:
+
+1. Prüfen, ob `Obsidian/.obsidian/` existiert (Vault schon mal in der
+   Obsidian-App geöffnet?). Falls nicht: einmal öffnen.
+2. Obsidian-Skills im Vault installieren, falls noch nicht geschehen
+   (`--skip-obsidian-skills` NICHT setzen beim nächsten Skript-Lauf).
+3. Vault-Übersichtsnotiz aus dem Template anlegen und verlinken.
+4. Sobald ein echtes Arbeitsprojekt als Git-Repo unter
+   `60_DEV_AGENTEN_TOOLS/` existiert: Schritte 3-7 aus Abschnitt 3 dafür
+   wiederholen (zweiter Code-Root).
 
 Details und Hintergründe stehen in
 [`../workplace-graphify-obsidian-setup.md`](../workplace-graphify-obsidian-setup.md).
