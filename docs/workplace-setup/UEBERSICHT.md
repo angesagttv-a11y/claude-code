@@ -24,19 +24,58 @@ Gebrauchsanleitung.
 | Graphify auf Code-Root gelaufen (`/graphify .`) | ✅ erledigt (2026-06-13) | 1.062 Nodes, 1.383 Edges, 116 Communities |
 | Graphify-Skill installiert (claude + codex) | ✅ erledigt (2026-06-13) | `.claude/skills/graphify/`, `.codex/skills/graphify/` |
 | `graphify-out/` aus Git ausgeschlossen | ✅ erledigt | `.gitignore` |
-| Obsidian-Vault in Obsidian geöffnet/initialisiert (`.obsidian/`) | ⚠️ **ungeprüft** | dein Mac — noch zu verifizieren |
-| Obsidian-Skills im Vault installiert | ⚠️ **ungeprüft** | dein Mac — noch zu verifizieren |
+| Obsidian-Vault in Obsidian geöffnet/initialisiert (`.obsidian/`) | ✅ **bestätigt (2026-06-13/14, per Screenshot)** | Vault ist aktiv geladen, voll ausgebaute Struktur vorhanden |
+| Obsidian-Skills im Vault installiert | ⚠️ **noch nicht direkt geprüft** | Ordnerstruktur sichtbar, Skill-Installation selbst nicht verifiziert |
 | Zweiter Code-Root (echtes Arbeitsprojekt) | ❌ noch offen | `10_AKTIV/` enthält aktuell keine Git-Repos |
 | Obsidian mobile Sync (iPhone) | ⏸️ **bewusst zurückgestellt** | Nutzer-Entscheidung 2026-06-13 |
 | PR auf GitHub erstellt | ⏸️ bewusst nicht gemacht | Repo bleibt privater Backup-/Sync-Mechanismus |
 
 **Kurz gesagt:** Planung, Doku, Werkzeug UND der erste echte Durchlauf sind
-erledigt (Details: `SESSION_HANDOVER_2026-06-13.md`). Offen sind nur noch
-zwei kleine Verifikationen auf dem Mac (`.obsidian/`-Status, Obsidian-Skills)
-sowie optional ein zweiter Code-Root, sobald ein echtes Arbeitsprojekt als
-Git-Repo unter `60_DEV_AGENTEN_TOOLS/` angelegt wird. Diese Prüfungen können
-nur lokal auf dem Mac laufen (isolierte Sandbox hier hat keinen Zugriff auf
-`/Users/jessenikoi/Workplace`).
+erledigt (Details: `SESSION_HANDOVER_2026-06-13.md`). Der Vault ist
+nachweislich initialisiert und bereits deutlich ausgebaut (siehe
+"Bestätigte reale Vault-Struktur" unten). Offen sind nur noch: Obsidian-Skills
+im Vault verifizieren und optional ein zweiter Code-Root, sobald ein echtes
+Arbeitsprojekt als Git-Repo unter `60_DEV_AGENTEN_TOOLS/` angelegt wird.
+
+### Bestätigte reale Vault-Struktur (2026-06-13/14, per Screenshot verifiziert)
+
+Der Vault ist bereits deutlich reifer als die generischen Templates
+angenommen hatten:
+
+```text
+00_INBOX/
+01_DAILY_NOTES/
+10_PROJEKTE/
+├── claude-code/              # Notiz zum ersten Graphify-Code-Root existiert bereits
+└── KI_Output_System/
+    └── 2026-06-14_notebooklm_projekt...
+20_BEREICHE/
+30_RESSOURCEN/
+40_ENTSCHEIDUNGEN/
+50_OFFENE_FRAGEN/
+60_PROZESSE_SOPS/
+70_AGENTEN_MEMORY/             # geteiltes KI-Gedächtnis über alle Agenten hinweg
+80_ARCHIV/
+└── Chat-Archiv/
+    ├── ChatGPT/_ANLEITUNG
+    ├── Claude-Code/
+    ├── Claude-Web/_ANLEITUNG
+    ├── Codex/
+    ├── Manus/
+    ├── WhatsApp/
+    ├── INDEX
+    └── README
+90_TEMPLATES/
+99_SYSTEM/
+00_START_HIER
+```
+
+Das deckt sich gut mit unserem Konzept (`10_PROJEKTE/<Projekt>` für
+Vault-Übersichtsnotizen, siehe `templates/projekt-uebersicht.md`) und
+erfüllt bereits das langfristige Ziel eines geteilten Gedächtnisses
+(`70_AGENTEN_MEMORY/`, `80_ARCHIV/Chat-Archiv/<Tool>/`). Für neue Projekte
+reicht es, `templates/projekt-uebersicht.md` nach `10_PROJEKTE/<Projekt_X>/`
+zu kopieren und dort mit dem jeweiligen Code-Root/Graphify-Output zu verlinken.
 
 ## 1. Use-Case: Wofür ist das Ganze?
 
