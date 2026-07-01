@@ -25,17 +25,44 @@ Gebrauchsanleitung.
 | Graphify-Skill installiert (claude + codex) | ✅ erledigt (2026-06-13) | `.claude/skills/graphify/`, `.codex/skills/graphify/` |
 | `graphify-out/` aus Git ausgeschlossen | ✅ erledigt | `.gitignore` |
 | Obsidian-Vault in Obsidian geöffnet/initialisiert (`.obsidian/`) | ✅ **bestätigt (2026-06-13/14, per Screenshot)** | Vault ist aktiv geladen, voll ausgebaute Struktur vorhanden |
-| Obsidian-Skills im Vault installiert | ⚠️ **noch nicht direkt geprüft** | Ordnerstruktur sichtbar, Skill-Installation selbst nicht verifiziert |
+| Obsidian-Skills (`kepano/obsidian-skills`, 5 Skills) global installiert | ✅ **erledigt (2026-06-14)** | manuell nach `~/.claude/skills/` kopiert (User-Ebene, alle Projekte) |
 | Zweiter Code-Root (echtes Arbeitsprojekt) | ❌ noch offen | `10_AKTIV/` enthält aktuell keine Git-Repos |
 | Obsidian mobile Sync (iPhone) | ⏸️ **bewusst zurückgestellt** | Nutzer-Entscheidung 2026-06-13 |
+| Zusatz-Skills `qmd` (semantische Suche) und `obsidian-second-brain` | ⏸️ **bewusst zurückgestellt** | `qmd` braucht globales npm-Paket + Vault-Indexing; `obsidian-second-brain` installiert per `curl \| bash` von ungeprüftem Drittanbieter-Repo — beides erst nach expliziter Freigabe |
 | PR auf GitHub erstellt | ⏸️ bewusst nicht gemacht | Repo bleibt privater Backup-/Sync-Mechanismus |
 
-**Kurz gesagt:** Planung, Doku, Werkzeug UND der erste echte Durchlauf sind
-erledigt (Details: `SESSION_HANDOVER_2026-06-13.md`). Der Vault ist
-nachweislich initialisiert und bereits deutlich ausgebaut (siehe
-"Bestätigte reale Vault-Struktur" unten). Offen sind nur noch: Obsidian-Skills
-im Vault verifizieren und optional ein zweiter Code-Root, sobald ein echtes
-Arbeitsprojekt als Git-Repo unter `60_DEV_AGENTEN_TOOLS/` angelegt wird.
+**Kurz gesagt:** Planung, Doku, Werkzeug, der erste echte Graphify-Durchlauf
+UND die globale Obsidian-Skill-Installation sind erledigt (Details:
+`SESSION_HANDOVER_2026-06-13.md`). Der Vault ist nachweislich initialisiert
+und bereits deutlich ausgebaut (siehe "Bestätigte reale Vault-Struktur"
+unten). Offen ist nur noch ein zweiter Code-Root, sobald ein echtes
+Arbeitsprojekt als Git-Repo unter `60_DEV_AGENTEN_TOOLS/` angelegt wird -
+sowie die optionalen Zusatz-Skills, falls gewünscht.
+
+### Obsidian-Skills — Installationsdetails (2026-06-14)
+
+Installiert per manuellem Kopieren (robuste, versionsunabhängige Methode,
+nachdem `/plugin install` in einer falschen Umgebung fehlschlug):
+
+```bash
+mkdir -p ~/.claude/skills
+git clone --depth 1 https://github.com/kepano/obsidian-skills.git /tmp/obsidian-skills-src
+cp -r /tmp/obsidian-skills-src/skills/* ~/.claude/skills/
+rm -rf /tmp/obsidian-skills-src
+```
+
+→ liegt jetzt in `~/.claude/skills/{obsidian-markdown,obsidian-bases,json-canvas,obsidian-cli,defuddle}`
+(**User-Ebene**, nicht projekt-lokal) - Claude Code erkennt sie in jedem
+Projekt nach einem Neustart der Sitzung.
+
+**Bewusst NICHT installiert:**
+- `qmd` (aus `breferrari/obsidian-mind`) - semantische Vault-Suche, würde ein
+  globales `npm install -g @tobilu/qmd` plus einen Bootstrap-Indexierungslauf
+  über den ganzen Vault erfordern.
+- `eugeniughelbur/obsidian-second-brain` - 44-Kommando-System, offizieller
+  Installer ist ein `curl | bash` von einem ungeprüften Drittanbieter-Repo.
+
+Beides nur nach expliziter Freigabe nachrüsten.
 
 ### Bestätigte reale Vault-Struktur (2026-06-13/14, per Screenshot verifiziert)
 
