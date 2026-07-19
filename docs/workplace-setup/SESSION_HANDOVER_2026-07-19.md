@@ -305,15 +305,98 @@ ls -la ~/.claude/skills/
 
 ---
 
+## 7. Fortsetzung (gleicher Tag, 2026-07-19): Stabilisierungs-Runde
+
+Nach diesem Dokument wurde der Nutzer extern (Manus oder eine andere
+KI-Sitzung) mit der veralteten `UEBERSICHT.md` (Stand 2026-06-10-ähnlich,
+noch mit "❌ noch offen" für längst erledigte Punkte) konfrontiert und hat
+einen priorisierten Stabilisierungsplan zurückbekommen ("Nicht mehr
+Tool-Ausbau, sondern Stabilisierung"). Der Nutzer hat diesen Plan bestätigt
+("Ja.") und mich gebeten, ihn aktiv umzusetzen.
+
+**Was in dieser Runde tatsächlich umgesetzt wurde (repo-seitig, in der
+Sandbox):**
+
+1. **Repo-Hygiene geprüft (Priorität 1, Punkt 3 aus dem Plan):** `git
+   status` war bereits sauber, `graphify-out/` steht bereits seit dem
+   06-13-Commit in `.gitignore`, keine getrackten Graphify-Dateien im Repo.
+   → **War bereits erledigt, nicht neu gemacht**, nur verifiziert.
+2. **Safety Guard defensiv erweitert (Priorität 2, Punkt 5):**
+   `scripts/setup-graphify-workplace.sh` — `FORBIDDEN_BASENAMES` und das
+   Pfad-Pattern in `guard_forbidden_path()` um die im Plan genannten neuen
+   Ordnernamen ergänzt (`55_PRIVAT`, `50_FIRMEN_FINANZEN_RECHT`,
+   `60_MEDIA_INDEX`, `80_ARCHIV`) — **als Superset zu den alten Namen**, nicht
+   als Ersatz, da die neuen Namen **nicht gegen die reale Mac-Struktur
+   verifiziert** sind (siehe Abschnitt "Wichtige Entscheidungen" unten).
+   Getestet: `bash -n` (Syntax), Dry-Run gegen einen neu gesperrten Namen
+   (`60_MEDIA_INDEX` → blockt korrekt mit `ABBRUCH`), Dry-Run gegen einen
+   weiterhin erlaubten Testpfad (läuft durch).
+3. **Doku korrigiert (Priorität 2, Punkt 4):** `UEBERSICHT.md` Abschnitt 0
+   aktualisiert (Datum, Status-Tabelle, expliziter Warnhinweis "kein
+   Graphify direkt auf `10_AKTIV`", expliziter Warnhinweis zu den zwei
+   offenen Verifikationen), Abschnitt 4 (Nächste Schritte) auf die neue
+   Prioritätsreihenfolge umgestellt, Abschnitt 5 (Harte Regeln) mit der
+   erweiterten Namensliste synchronisiert.
+
+**Was NICHT umgesetzt wurde, weil es nur lokal auf dem Mac geht (aus der
+Sandbox nicht möglich):**
+
+- **Priorität 1, Punkt 1 (Skill-Verifizierung):** Nicht durchführbar aus der
+  Sandbox. Interessanter Fund: In *dieser* Sitzung (Cloud-Sandbox) zeigt das
+  Skill-Tool inzwischen tatsächlich `obsidian-markdown`, `obsidian-bases`,
+  `json-canvas`, `obsidian-cli`, `defuddle` als verfügbar an — **aber das ist
+  vermutlich eine andere "Oberfläche"** (Skill-Liste enthält auch viele
+  Marketing-/Business-Skills, die nach einem org-weiten Claude-Cowork-Konto
+  aussehen, nicht nach der lokalen Mac-CLI mit `~/.claude/skills/`). **Das
+  ist keine Bestätigung für die lokale Mac-Sitzung** — dort muss weiterhin
+  frisch mit `ls -la ~/.claude/skills/` nach vollständigem Neustart geprüft
+  werden.
+- **Priorität 1, Punkt 2 (Graphify nicht mehr auf `10_AKTIV`):** Als Regel
+  jetzt in Doku + Safety Guard verankert (Guard blockte `10_AKTIV` technisch
+  aber ohnehin schon seit 2026-06-13). Ob tatsächlich schon einmal ein Lauf
+  direkt auf `10_AKTIV` stattgefunden hat, ist **nicht verifiziert** — das
+  stammt nur aus dem externen Plan, nicht aus eigener Beobachtung.
+- **Priorität 2, Punkt 6 (Obsidian-Git-Strategie):** Bewusst noch keine
+  Entscheidung getroffen — braucht eine explizite Nutzerentscheidung
+  (Abschnitt "Nächste Schritte" unten).
+- **Priorität 3 (zweiter Code-Root, `qmd`/`obsidian-second-brain`):**
+  weiterhin unverändert zurückgestellt, wie in der ursprünglichen Sitzung
+  entschieden.
+
+### Ergänzung zu Abschnitt 3 (Wichtige Entscheidungen) — neue Fakten/Annahmen
+
+**Fakten (in dieser Runde verifiziert):**
+- `.gitignore` enthält `graphify-out/`; `git ls-files | grep graphify-out`
+  liefert keine Treffer.
+- Erweiterter Safety Guard funktioniert wie getestet (siehe oben).
+
+**Annahmen (explizit nicht verifiziert, aus einem externen Dokument
+übernommen — NICHT von mir eigenständig geprüft):**
+- Die im Plan genannten neuen Ordnernamen (`50_FIRMEN_FINANZEN_RECHT`,
+  `55_PRIVAT`, `60_MEDIA_INDEX`, `80_ARCHIV`, `70_DEV_TOOLS`,
+  `20_WISSEN/Obsidian`) entsprechen der aktuellen realen Mac-Struktur.
+- Es habe bereits Graphify-Läufe direkt auf `10_AKTIV` gegeben.
+
+Beide Annahmen wurden **nicht** blind übernommen, sondern nur als defensiver
+Superset in den Safety Guard eingebaut bzw. als Warnhinweis dokumentiert —
+ohne sie als bestätigte Fakten zu behandeln.
+
+---
+
 ## Selbstprüfung dieses Dokuments
 
 1. **Fakten vs. Annahmen getrennt?** Ja — Abschnitt 3 ist explizit in
    "Fakten (verifiziert)" und "Annahmen/Einschätzungen (nicht verifiziert)"
-   unterteilt.
+   unterteilt; Abschnitt 7 führt das für die Stabilisierungs-Runde fort und
+   markiert explizit, welche Ordnernamen/Behauptungen aus dem externen Plan
+   ungeprüft übernommen wurden.
 2. **Aktive Handlungsempfehlung statt nur Optionen?** Ja — Abschnitt 5 gibt
-   eine konkrete, nummerierte Reihenfolge mit einer klar benannten
-   Priorität (zuerst den Widerspruch auflösen, danach erst weitermachen).
-3. **Rückfragen bei Unsicherheit gestellt?** Ja — die drei offenen
-   Rückfragen am Ende von Abschnitt 5 wurden in der Sitzung gestellt, aber
-   noch nicht beantwortet; sie sind bewusst als offen markiert statt
-   stillschweigend angenommen.
+   eine konkrete, nummerierte Reihenfolge mit klar benannter Priorität
+   (zuerst den Skill-Erkennungs-Widerspruch auflösen, dann die
+   Ordnernamen bestätigen, danach erst weitermachen); Abschnitt 7 listet
+   explizit, was bereits umgesetzt wurde vs. was nur lokal geht.
+3. **Rückfragen bei Unsicherheit gestellt?** Ja — die offenen Rückfragen in
+   Abschnitt 5 sind weiterhin unbeantwortet und bewusst offen markiert;
+   zusätzlich wurde die Verlässlichkeit des externen Plans (neue
+   Ordnernamen, angeblicher `10_AKTIV`-Lauf) explizit als ungeprüft
+   gekennzeichnet statt stillschweigend als Fakt übernommen.
