@@ -445,6 +445,63 @@ Risiko kommuniziert statt heruntergespielt.
 
 ---
 
+## 9. Korrektur + konkreter Workflow: WhatsApp-Export → Obsidian-Vault
+
+**Korrektur:** Abschnitt 8 ging fälschlich von einer gewünschten
+Live-MCP-Anbindung für WhatsApp aus. Tatsächlich hat der Nutzer seine Chats
+**bereits manuell exportiert** (liegen als Dateien in einem Ordner auf dem
+Mac) und wollte nur wissen, wie er sie **in den Obsidian-Vault** bekommt
+("Wissenserweiterung"). Auf Rückfrage (`AskUserQuestion`) bestätigt: Ziel
+ist der Obsidian-Vault, nicht ein Word-Dokument oder etwas anderes.
+
+**Kein MCP nötig** — die Dateien liegen schon lokal, es ist ein reiner
+Datei-Konvertierungs-/Kurations-Job, den eine lokale Claude-Code-Sitzung
+mit dem bereits installierten `obsidian-markdown`-Skill direkt erledigen
+kann.
+
+### Fertiger Prompt für die nächste lokale Claude-Code-Sitzung
+
+```text
+Ich habe meine WhatsApp-Chats bereits manuell exportiert (.txt-Dateien,
+teils mit Medien-Ordnern). Sie liegen in: <PFAD_ZU_DEINEM_EXPORT_ORDNER>
+
+Bitte für jeden Chat/Export in diesem Ordner:
+1. Lies die .txt-Datei (Format: Datum, Zeit, Absender, Nachricht).
+2. Wandle sie in eine saubere Obsidian-Notiz um (nutze den
+   obsidian-markdown-Skill für korrektes Frontmatter/Formatierung):
+   - Dateiname: <Kontakt-oder-Gruppenname>.md
+   - YAML-Frontmatter: contact/gruppe, zeitraum_von, zeitraum_bis,
+     tags: [whatsapp, archiv]
+   - Lesbar formatierter Chatverlauf (nicht 1:1 Rohtext-Kopie)
+   - Am Anfang der Notiz einen Abschnitt "## Wichtige Punkte" mit
+     Fakten/Entscheidungen/Terminen, die im Chat auftauchen (falls
+     vorhanden) - das ist der eigentliche "Wissenserweiterungs"-Mehrwert,
+     nicht nur das Archiv selbst.
+3. Speichere jede Notiz unter:
+   <WORKSPACE_ROOT>/Obsidian/80_ARCHIV/Chat-Archiv/WhatsApp/<Name>.md
+4. Erstelle/aktualisiere eine Index-Notiz
+   80_ARCHIV/Chat-Archiv/WhatsApp/INDEX.md mit Links zu allen importierten
+   Notizen (Name, Zeitraum, Kurzbeschreibung).
+5. Falls eine Notiz Fakten enthält, die über reines Chat-Archiv
+   hinausgehen (z.B. eine Projektentscheidung, ein wichtiger Kontakt-Fakt):
+   kurz Bescheid geben, damit das zusätzlich in die passende kuratierte
+   Sektion (z.B. 40_ENTSCHEIDUNGEN/, 20_BEREICHE/) verlinkt werden kann -
+   nicht automatisch selbst dorthin verschieben.
+```
+
+**Warum so und nicht per Drittanbieter-Tool (`whatstk`,
+`obsidian-whatsapp-backup-importer`):** Claude Code hat mit dem
+`obsidian-markdown`-Skill bereits alles, was für sauberes Formatieren
+gebraucht wird, plus die Fähigkeit, Inhalte inhaltlich zu verstehen und
+wichtige Punkte hervorzuheben (das können reine Konvertierungs-Tools
+nicht) - kein zusätzliches Tool/npm-Paket nötig.
+
+**Offen:** Der genaue Pfad zum Export-Ordner auf dem Mac ist mir nicht
+bekannt (kein Zugriff von hier) - der Nutzer muss `<PFAD_ZU_DEINEM_
+EXPORT_ORDNER>` im Prompt selbst ersetzen.
+
+---
+
 ## Selbstprüfung dieses Dokuments
 
 1. **Fakten vs. Annahmen getrennt?** Ja — Abschnitt 3 ist explizit in

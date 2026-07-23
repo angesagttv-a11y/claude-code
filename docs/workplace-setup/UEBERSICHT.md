@@ -39,7 +39,7 @@ Gebrauchsanleitung.
 | Safety Guard an gemeldete Umbenennung angepasst (Superset, unverifiziert) | ✅ **erledigt (2026-07-19)** | `scripts/setup-graphify-workplace.sh` — siehe Warnhinweis unten |
 | Obsidian-Backup-Strategie geklärt (offizielle Doku ausgewertet) | ✅ **Empfehlung fertig (2026-07-19), Ausführung auf dem Mac noch offen** | siehe Abschnitt 6, `templates/obsidian-vault.gitignore.template` |
 | Plaud per MCP anbinden | ✅ **offizieller Weg recherchiert (2026-07-19), Einrichtung noch offen** | siehe Abschnitt 7 — offizieller Plaud-MCP-Server existiert |
-| WhatsApp-Anbindung ("Mozepp") | ⚠️ **recherchiert (2026-07-19) — kein offizieller Weg, Risiko-Abwägung nötig** | siehe Abschnitt 7 |
+| WhatsApp-Import in Vault ("Mozepp") | ✅ **Workflow fertig (2026-07-19), Ausführung auf dem Mac noch offen** | bereits manuell exportierte Chats → `80_ARCHIV/Chat-Archiv/WhatsApp/`, Prompt in `SESSION_HANDOVER_2026-07-19.md` Abschnitt 9 |
 | Zweiter Code-Root (echtes Arbeitsprojekt) | ❌ noch offen | `10_AKTIV/` enthält aktuell keine Git-Repos |
 | Obsidian mobile Sync (iPhone) | ⏸️ **bewusst zurückgestellt** | Nutzer-Entscheidung 2026-06-13 |
 | Zusatz-Skills `qmd` (semantische Suche) und `obsidian-second-brain` | ⏸️ **bewusst zurückgestellt** | `qmd` braucht globales npm-Paket + Vault-Indexing; `obsidian-second-brain` installiert per `curl \| bash` von ungeprüftem Drittanbieter-Repo — beides erst nach expliziter Freigabe |
@@ -466,9 +466,19 @@ für kuratierte Auszüge — **nicht** die komplette Rohaufnahmen-Historie
 direkt in den Vault spiegeln (gleiche Faustregel wie bei Graphify: Vault
 bekommt nur Verdichtetes).
 
-### WhatsApp ("Mozepp-Backup") — kein offizieller Weg, echtes Risiko bei Umgehung
+### WhatsApp ("Mozepp-Backup") — Korrektur (2026-07-19, später am selben Tag)
 
-Recherche-Ergebnis, klar in offiziell vs. inoffiziell getrennt:
+**Richtigstellung:** Der Nutzer hat seine WhatsApp-Chats bereits manuell
+exportiert und liegen als Dateien in einem Ordner auf dem Mac. Es geht
+**nicht** um eine Live-Anbindung/MCP-Bridge, sondern nur darum, die
+bereits vorhandenen Export-Dateien als saubere Notizen in den Obsidian-
+Vault zu bekommen ("Wissenserweiterung"). Die MCP-/ToS-Risiko-Recherche
+unten bleibt als Hintergrundwissen stehen (falls später doch mal eine
+Live-Anbindung erwogen wird), ist für die aktuelle Aufgabe aber **nicht
+relevant** — siehe stattdessen den konkreten Import-Workflow im
+Session-Handover, Abschnitt 9.
+
+Ursprüngliche Recherche zur Einordnung (offiziell vs. inoffiziell):
 
 - **Kein offizieller Weg:** Meta bietet keine API, mit der eine
   Privatperson programmatisch auf die eigene Chat-Historie zugreifen kann.
