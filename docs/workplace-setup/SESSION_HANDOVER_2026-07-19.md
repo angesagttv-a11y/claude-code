@@ -383,18 +383,83 @@ ohne sie als bestätigte Fakten zu behandeln.
 
 ---
 
+## 8. Fortsetzung (gleicher Tag): Obsidian-Doku-Recherche + externe Quellen
+
+Der Nutzer bat darum, das gesamte Setup anhand der offiziellen Obsidian-
+Dokumentation (`obsidian.md/help/`) final zu prüfen, und wollte zusätzlich
+"Mozepp-Backup" (nach Rückfrage per `AskUserQuestion` geklärt: **WhatsApp**,
+Diktier-Verhör von "Mozepp" -> "Whatsapp") sowie "Plaud"-Output per MCP
+anbinden.
+
+**Durchgeführt (3 parallele Recherche-Agenten, alle mit Quellenangaben):**
+
+1. **Obsidian-Doku** (`github.com/obsidianmd/obsidian-help`, da die
+   gerenderte Seite `obsidian.md/help` HTTP 403 zurückgibt — Cloudflare-
+   Bot-Schutz). Kernergebnisse: "Syncing ist kein Backup" (offizielle
+   Aussage), `.obsidian/workspace.json`/`workspaces.json` sollen bei
+   Git-Nutzung ignoriert werden, Obsidian Sync warnt explizit vor
+   Parallelbetrieb mit anderen Sync-Mechanismen, Bases ist ein Core-Plugin
+   und **völlig unabhängig** von unserem Claude-Code-Skill gleichen Namens.
+   Volltext mit allen Quellenangaben in `UEBERSICHT.md`, Abschnitt 6.
+2. **Plaud → MCP:** Offizieller Plaud-MCP-Server + CLI existiert, gebaut
+   für Claude Code/Desktop. Empfehlung: den offiziellen Weg nehmen. Details
+   in `UEBERSICHT.md`, Abschnitt 7.
+3. **WhatsApp → MCP:** Kein offizieller Weg für Privatpersonen. Inoffizielle
+   MCP-Server (Baileys-basiert) existieren, aber mit **echtem,
+   dokumentiertem Risiko dauerhafter Account-Sperren** laut WhatsApps
+   Nutzungsbedingungen. Empfehlung: risikoarmer manueller Export-Workflow
+   in den bereits bestehenden Vault-Ordner `80_ARCHIV/Chat-Archiv/WhatsApp/`
+   statt Live-Bridge. Details in `UEBERSICHT.md`, Abschnitt 7.
+
+**Umgesetzt (repo-seitig):**
+- Neue Datei `docs/workplace-setup/templates/obsidian-vault.gitignore.template`
+  (setzt die offizielle Empfehlung zu `workspace.json`/`workspaces.json` um).
+- `UEBERSICHT.md` um Abschnitt 6 (Obsidian-Doku-Erkenntnisse +
+  Backup-Entscheidung: eigenes privates Vault-Git-Repo) und Abschnitt 7
+  (Plaud/WhatsApp-Anbindung) erweitert.
+
+**Nicht umgesetzt (braucht Nutzerentscheidung bzw. lokale Ausführung):**
+- Vault-Git-Repo tatsächlich auf dem Mac anlegen (`git init` im Vault) —
+  Befehl liegt bereit in `UEBERSICHT.md` Abschnitt 6, aber nicht von hier
+  ausführbar.
+- Ob das Vault-Repo zusätzlich privat auf GitHub gepusht werden soll —
+  offene Rückfrage.
+- Plaud-MCP-Einrichtung — braucht eine lokale/interaktive Sitzung (OAuth).
+- WhatsApp-Workflow — offene Rückfrage, ob der risikoarme manuelle Weg
+  reicht oder der Nutzer den Live-Bridge-Weg trotz Risiko will.
+
+### Ergänzung Fakten vs. Annahmen (diese Runde)
+
+**Fakten:** Alle Obsidian-Doku-Aussagen in Abschnitt 6 der `UEBERSICHT.md`
+sind direkt aus den Rohdateien des offiziellen Doku-Repos zitiert (Seiten
+namentlich genannt). Die Plaud-MCP-Existenz und die WhatsApp-ToS-Aussage
+sind mit Quellen-URLs belegt (siehe Recherche-Ergebnisse, in `UEBERSICHT.md`
+Abschnitt 7 verlinkt).
+
+**Nicht verifiziert / meine Einschätzung:** Die Risikobewertung
+("Sperren sind meist dauerhaft, ohne Widerspruch") stammt aus öffentlich
+dokumentierten Einzelfällen (GitHub-Issues), nicht aus einer offiziellen
+Meta-Statistik — Einzelfälle sind ein Hinweis auf reales Risiko, aber keine
+Erfolgsquote/Wahrscheinlichkeit. Als Vorsichtsmaßnahme trotzdem klar als
+Risiko kommuniziert statt heruntergespielt.
+
+---
+
 ## Selbstprüfung dieses Dokuments
 
 1. **Fakten vs. Annahmen getrennt?** Ja — Abschnitt 3 ist explizit in
    "Fakten (verifiziert)" und "Annahmen/Einschätzungen (nicht verifiziert)"
    unterteilt; Abschnitt 7 führt das für die Stabilisierungs-Runde fort und
    markiert explizit, welche Ordnernamen/Behauptungen aus dem externen Plan
-   ungeprüft übernommen wurden.
+   ungeprüft übernommen wurden; Abschnitt 8 trennt zusätzlich belegte
+   Doku-/Recherche-Fakten von der eigenen Risikoeinschätzung zu WhatsApp.
 2. **Aktive Handlungsempfehlung statt nur Optionen?** Ja — Abschnitt 5 gibt
    eine konkrete, nummerierte Reihenfolge mit klar benannter Priorität
    (zuerst den Skill-Erkennungs-Widerspruch auflösen, dann die
    Ordnernamen bestätigen, danach erst weitermachen); Abschnitt 7 listet
-   explizit, was bereits umgesetzt wurde vs. was nur lokal geht.
+   explizit, was bereits umgesetzt wurde vs. was nur lokal geht; Abschnitt 8
+   empfiehlt aktiv den risikoarmen WhatsApp-Weg statt nur Optionen
+   aufzuzählen.
 3. **Rückfragen bei Unsicherheit gestellt?** Ja — die offenen Rückfragen in
    Abschnitt 5 sind weiterhin unbeantwortet und bewusst offen markiert;
    zusätzlich wurde die Verlässlichkeit des externen Plans (neue

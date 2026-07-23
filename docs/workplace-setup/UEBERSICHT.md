@@ -37,6 +37,9 @@ Gebrauchsanleitung.
 | Obsidian-Skills (`kepano/obsidian-skills`, 5 Skills) global installiert | ⚠️ **kopiert (2026-06-14), Erkennung durch Claude Code lokal auf dem Mac noch nicht sauber verifiziert** | manuell nach `~/.claude/skills/` kopiert (User-Ebene) — siehe Warnhinweis unten |
 | `graphify-out/` nicht versioniert, Repo sauber | ✅ **bestätigt (2026-07-19)** | `.gitignore` enthält `graphify-out/`, keine getrackten Graphify-Dateien im Repo |
 | Safety Guard an gemeldete Umbenennung angepasst (Superset, unverifiziert) | ✅ **erledigt (2026-07-19)** | `scripts/setup-graphify-workplace.sh` — siehe Warnhinweis unten |
+| Obsidian-Backup-Strategie geklärt (offizielle Doku ausgewertet) | ✅ **Empfehlung fertig (2026-07-19), Ausführung auf dem Mac noch offen** | siehe Abschnitt 6, `templates/obsidian-vault.gitignore.template` |
+| Plaud per MCP anbinden | ✅ **offizieller Weg recherchiert (2026-07-19), Einrichtung noch offen** | siehe Abschnitt 7 — offizieller Plaud-MCP-Server existiert |
+| WhatsApp-Anbindung ("Mozepp") | ⚠️ **recherchiert (2026-07-19) — kein offizieller Weg, Risiko-Abwägung nötig** | siehe Abschnitt 7 |
 | Zweiter Code-Root (echtes Arbeitsprojekt) | ❌ noch offen | `10_AKTIV/` enthält aktuell keine Git-Repos |
 | Obsidian mobile Sync (iPhone) | ⏸️ **bewusst zurückgestellt** | Nutzer-Entscheidung 2026-06-13 |
 | Zusatz-Skills `qmd` (semantische Suche) und `obsidian-second-brain` | ⏸️ **bewusst zurückgestellt** | `qmd` braucht globales npm-Paket + Vault-Indexing; `obsidian-second-brain` installiert per `curl \| bash` von ungeprüftem Drittanbieter-Repo — beides erst nach expliziter Freigabe |
@@ -349,3 +352,166 @@ gesperrten Pfade brechen mit `ABBRUCH: ...` ab.
 hinzugefügter gesperrter Name (`60_MEDIA_INDEX`) blockt korrekt im Dry-Run;
 ein weiterhin erlaubter Testpfad läuft weiterhin fehlerfrei durch
 (`bash -n` Syntaxcheck zusätzlich grün).
+
+## 6. Obsidian — offizielle Doku-Erkenntnisse & Backup-Entscheidung (2026-07-19)
+
+Ausgewertet direkt aus der Quelle der offiziellen Doku
+(`github.com/obsidianmd/obsidian-help`, Ordner `en/`; die gerenderte Seite
+`obsidian.md/help` blockt automatisierte Zugriffe mit HTTP 403, deshalb
+Auswertung über die Repo-Rohdateien). Jede Aussage ist mit der jeweiligen
+Quellseite belegt.
+
+### Fakten (aus der offiziellen Doku, mit Quelle)
+
+- **"Syncing ist kein Backup"** — offizielle Aussage aus "Back up your
+  Obsidian files". Die Doku nennt zwei (nicht offiziell unterstützte)
+  Community-Plugins als typische Lösungen: **Obsidian Git** (Vault als
+  Git-Repo versionieren) und **Local Backup** (lokale Ordnerkopien). Genau
+  das haben wir mit diesem Setup-Repo ohnehin vor — bestätigt also unseren
+  Ansatz, ist aber kein offiziell "empfohlenes" Feature, sondern
+  Community-Praxis.
+- **`.obsidian/workspace.json` und `.obsidian/workspaces.json`** speichern
+  nur das aktuelle Fenster-/Tab-Layout, ändern sich bei jedem Notiz-Öffnen
+  und sollen laut "How Obsidian stores data" bei Git-Nutzung explizit
+  ignoriert werden. → Umgesetzt in
+  `templates/obsidian-vault.gitignore.template` (neu, siehe unten).
+- **Obsidian Sync** (der offizielle, kostenpflichtige Sync-Dienst) synct
+  standardmäßig Notizen + Konfigurationsordner; Bilder/Audio/Video/PDF sind
+  per Default selektiv synct, alles andere über einen Schalter; einzelne
+  Ordner lassen sich ausschließen ("Sync settings and selective syncing").
+  Max. Dateigröße 5 MB (Standard) / 200 MB (Plus); Versionshistorie 1 bzw.
+  12 Monate ("Frequently asked questions"). **Wichtig:** die Doku warnt
+  ausdrücklich davor, Obsidian Sync **gleichzeitig** mit einem anderen
+  Sync-Mechanismus (iCloud, OneDrive, Dropbox, Git) auf demselben Vault
+  laufen zu lassen — das führt zu Konflikten/doppelten oder korrupten
+  Dateien (FAQ-Seite). **Für uns heißt das konkret: falls ihr je Obsidian
+  Sync aktiviert, NICHT zusätzlich Git/iCloud auf denselben Vault-Ordner
+  ansetzen.**
+- **Mehrgeräte-Nutzung ohne Obsidian Sync**: Die Doku listet iCloud,
+  OneDrive, Google Drive, Syncthing und Git/Working Copy als Alternativen
+  und warnt konkret: iCloud Drive unter Windows kann Dateien duplizieren/
+  korrumpieren; OneDrive/Google Drive können Dateien bei "nur online"-
+  Einstellungen unbemerkt "leeren" (sehen für Sync wie gelöscht aus); Google
+  Drive/OneDrive haben keinen offiziellen iOS-Support; Git erfordert
+  manuelles Push/Pull, kein Auto-Sync ("Sync your notes across devices").
+  → **relevant für die zurückgestellte Entscheidung "Obsidian mobile Sync
+  (iPhone)"**: falls ihr das später angeht, spricht das eher für Obsidian
+  Sync (kostenpflichtig, aber für Multi-Device gebaut) als für einen
+  iCloud-Hack.
+- **Bases ist ein Core Plugin** (in Obsidian selbst eingebaut, keine
+  Community-Plugin-Installation nötig) — reine Markdown-Properties als
+  Datenbasis, `.base`-Dateien sind normale Dateien im Vault ("Introduction
+  to Bases", "Core plugins"). **Wichtige Klarstellung:** Der Claude-Code-
+  Skill `obsidian-bases` (den wir am 2026-06-14 installiert haben) ist etwas
+  komplett anderes als das Obsidian-eigene Bases-Feature — der Skill bringt
+  nur Claude bei, `.base`-Dateien korrekt zu lesen/schreiben. **Er taucht
+  nirgendwo in Obsidian selbst auf** (nicht in "Community Plugins", nicht
+  in den Einstellungen) und erfordert nichts, das in der App aktiviert
+  werden müsste. Das gilt analog für die anderen 4 installierten Skills
+  (`obsidian-markdown`, `json-canvas`, `obsidian-cli`, `defuddle`) — alles
+  reine Claude-Code-seitige Fähigkeiten, unabhängig vom Obsidian-Plugin-
+  System.
+- **Community Plugins** (falls ihr später welche installiert, z.B. das oben
+  genannte "Obsidian Git"): erben laut "Plugin security" die vollen
+  Zugriffsrechte von Obsidian (Dateizugriff, Internet, Programme starten) —
+  die Doku empfiehlt, bei sensiblen Daten die Plugin-Quelle selbst zu
+  prüfen, trotz automatisierter Sicherheits-Scans.
+
+### Entscheidung (jetzt getroffen, Ausführung auf dem Mac noch offen)
+
+Damit ist Priorität 2, Punkt 6 aus der Stabilisierungs-Runde
+(`SESSION_HANDOVER_2026-07-19.md`) inhaltlich entschieden:
+
+**Der Obsidian-Vault bekommt ein eigenes, separates, privates Git-Repo**
+(nicht in diesem `claude-code`-Repo) — konsistent mit der offiziellen
+"Obsidian Git"-Community-Praxis. Dafür:
+
+```bash
+cd "$HOME/Workplace/Obsidian"
+git init
+cp <pfad-zu-diesem-repo>/docs/workplace-setup/templates/obsidian-vault.gitignore.template .gitignore
+git add .
+git commit -m "Initial vault backup"
+# Danach: privates Remote-Repo anlegen und pushen (z.B. GitHub privat)
+```
+
+**Noch offen (deine Entscheidung):** Soll dieses Vault-Repo zusätzlich auf
+GitHub gepusht werden (privat), oder reicht ein rein lokales Git-Repo als
+Backup? Und: falls ihr Obsidian Sync ohnehin schon nutzt oder erwägt —
+dann lieber **nur** Sync ODER Git, nicht beides parallel (siehe Warnung
+oben).
+
+## 7. Externe Quellen anbinden: Plaud & WhatsApp (2026-07-19)
+
+### Plaud (Sprachaufnahmen/Transkripte) — empfohlener Weg vorhanden
+
+Plaud (Plaud Note/NotePin) hat einen **offiziellen MCP-Server + CLI**,
+gebaut explizit für Claude Code/Claude Desktop, ChatGPT, Cursor u.a. —
+Aufnahmen auflisten, Roh-/geglättete Transkripte und KI-Zusammenfassungen
+direkt abrufen:
+- Ankündigung: https://www.plaud.ai/blogs/news/introducing-plaud-mcp-and-cli
+- Support-Doku: https://support.plaud.ai/hc/en-us/articles/57751078986265-Plaud-MCP
+- Developer-Plattform (REST-API + Webhooks, falls mehr Kontrolle nötig):
+  https://docs.plaud.ai/ , https://dev.plaud.ai/
+
+**Empfehlung:** offiziellen Plaud-MCP-Server zuerst nutzen (kein
+Drittanbieter-Vertrauen nötig). **Muss lokal/interaktiv eingerichtet
+werden** (OAuth/API-Key) — aus dieser Sandbox nicht möglich, genau wie
+schon beim `/plugin install`-Fall. Mach das in einer lokalen Claude-Code-
+Sitzung auf dem Mac oder über die claude.ai-Connector-Einstellungen.
+
+Landeplatz im Vault (Vorschlag, analog zur bestehenden Struktur): ein neuer
+Ordner z.B. `70_AGENTEN_MEMORY/Plaud/` oder `80_ARCHIV/Plaud-Transkripte/`
+für kuratierte Auszüge — **nicht** die komplette Rohaufnahmen-Historie
+direkt in den Vault spiegeln (gleiche Faustregel wie bei Graphify: Vault
+bekommt nur Verdichtetes).
+
+### WhatsApp ("Mozepp-Backup") — kein offizieller Weg, echtes Risiko bei Umgehung
+
+Recherche-Ergebnis, klar in offiziell vs. inoffiziell getrennt:
+
+- **Kein offizieller Weg:** Meta bietet keine API, mit der eine
+  Privatperson programmatisch auf die eigene Chat-Historie zugreifen kann.
+  Die "WhatsApp Business Platform / Cloud API" ist strikt für
+  Business-Messaging-Automatisierung gedacht, nicht für persönliche
+  Verlaufs-Extraktion — eine Migration der eigenen Nummer dorthin kann
+  sogar bestehende Chats verlieren. Die offizielle "Request Account Info"-
+  Funktion exportiert nur Metadaten, **keine** Nachrichteninhalte.
+- **Manueller offizieller Export:** In-App "Chat exportieren" erzeugt eine
+  `.txt`-Datei (+ optional `.zip` mit Medien) — pro Chat, gedeckelt auf
+  ca. 40.000 Nachrichten ohne Medien bzw. 10.000 mit Medien; ältere
+  Nachrichten werden stillschweigend abgeschnitten.
+- **Inoffizielle MCP-Server existieren** (z.B. `jlucaso1/whatsapp-mcp-ts`,
+  `ericporres/whatsapp-mcp-server`), basieren aber auf reverse-engineerten
+  WhatsApp-Web-Bibliotheken (Baileys) mit einer dauerhaft eingeloggten
+  "Linked Device"-Session deines echten Accounts.
+- ⚠️ **Echtes Risiko, nicht nur theoretisch:** WhatsApps Nutzungsbedingungen
+  (Messaging Guidelines, Business Terms) verbieten explizit "inoffizielle
+  Clients". Meta erkennt das automatisiert (nicht nur bei Beschwerden) —
+  auf GitHub dokumentierte Fälle zeigen echte Account-Sperr-Warnungen bei
+  Baileys/whatsmeow-Nutzern. Sperren sind laut den recherchierten Berichten
+  meist **dauerhaft, ohne Widerspruchsmöglichkeit** — auch bei rein
+  lesendem, privatem Gebrauch, weil schon die Linked-Device-Session selbst
+  das auffällige Verhalten ist.
+
+**Meine aktive Empfehlung:** **Nicht** den inoffiziellen Live-MCP-Bridge-Weg
+nehmen — das Risiko (dauerhafte Account-Sperre) steht in keinem Verhältnis
+zum Nutzen bei einem reinen Backup-/Archivierungs-Zweck. Stattdessen der
+risikoarme Weg, der ohnehin zum bestehenden Vault-Konzept passt:
+
+1. Regelmäßig "Chat exportieren" (.txt/.zip) für die relevanten Chats.
+2. Dateien ablegen unter dem **bereits existierenden** Vault-Ordner
+   `80_ARCHIV/Chat-Archiv/WhatsApp/` (bestätigt in der Vault-Struktur,
+   siehe oben — der Ordner ist offenbar genau dafür angelegt).
+3. Optional ein lokales Parse-Tool (z.B. `whatstk` oder
+   `obsidian-whatsapp-backup-importer`) nutzen, um die `.txt`-Exporte in
+   sauber formatierte Obsidian-Notizen umzuwandeln, statt Rohtext liegen
+   zu lassen.
+4. Claude Code liest diese Dateien dann ganz normal als Vault-Inhalt (dafür
+   braucht es kein MCP — die Datei liegt ja schon im Vault, den Claude über
+   die Obsidian-Skills sowieso lesen kann).
+
+**Offene Rückfrage:** Reicht dir der manuelle Export-Workflow (Schritte
+1-4), oder ist dir das zu manuell und du willst das Risiko des
+Live-Bridge-Wegs bewusst in Kauf nehmen? Das ist deine Entscheidung, nicht
+meine — ich empfehle aber klar den risikoarmen Weg.
