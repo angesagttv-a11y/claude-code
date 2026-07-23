@@ -34,7 +34,7 @@ Gebrauchsanleitung.
 | Graphify-Skill installiert (claude + codex) | ✅ erledigt (2026-06-13) | `.claude/skills/graphify/`, `.codex/skills/graphify/` |
 | `graphify-out/` aus Git ausgeschlossen | ✅ erledigt | `.gitignore` |
 | Obsidian-Vault in Obsidian geöffnet/initialisiert (`.obsidian/`) | ✅ **bestätigt (2026-06-13/14, per Screenshot)** | Vault ist aktiv geladen, voll ausgebaute Struktur vorhanden |
-| Obsidian-Skills (`kepano/obsidian-skills`, 5 Skills) global installiert | ⚠️ **kopiert (2026-06-14), Erkennung durch Claude Code lokal auf dem Mac noch nicht sauber verifiziert** | manuell nach `~/.claude/skills/` kopiert (User-Ebene) — siehe Warnhinweis unten |
+| Obsidian-Skills (`kepano/obsidian-skills`, 5 Skills) global installiert | ⚠️ **Dateien auf der Platte bestätigt (2026-07-23, per `ls -la` auf dem Mac) — Skill-Tool-Erkennung in einer frischen Sitzung noch offen** | `~/.claude/skills/{defuddle,json-canvas,obsidian-bases,obsidian-cli,obsidian-markdown}` real vorhanden |
 | `graphify-out/` nicht versioniert, Repo sauber | ✅ **bestätigt (2026-07-19)** | `.gitignore` enthält `graphify-out/`, keine getrackten Graphify-Dateien im Repo |
 | Safety Guard an gemeldete Umbenennung angepasst (Superset, unverifiziert) | ✅ **erledigt (2026-07-19)** | `scripts/setup-graphify-workplace.sh` — siehe Warnhinweis unten |
 | Obsidian-Backup-Strategie geklärt (offizielle Doku ausgewertet) | ✅ **Empfehlung fertig (2026-07-19), Ausführung auf dem Mac noch offen** | siehe Abschnitt 6, `templates/obsidian-vault.gitignore.template` |
@@ -56,14 +56,15 @@ gemeldete Workplace-Umbenennung gegen die reale Mac-Struktur bestätigen.
 Danach erst: zweiter Code-Root, Obsidian-Git-Strategie, optionale
 Zusatz-Skills.
 
-> ⚠️ **Warnhinweis (neu, 2026-07-19) — zwei offene Verifikationen:**
-> 1. **Obsidian-Skill-Erkennung:** Der `cp`-Befehl vom 2026-06-14 lief ohne
->    Fehler, aber eine später gemeldete Skill-Tool-Liste enthielt die 5
->    Obsidian-Skills nicht, und laut Nutzeraussage lag auf der Platte in
->    `~/.claude/skills/` angeblich nur `session-start-hook`. **Nicht
->    abschließend geklärt** — siehe `SESSION_HANDOVER_2026-07-19.md`,
->    Abschnitt 5, Diagnose-Befehle. **Vor produktivem Obsidian-Einsatz mit
->    Claude Code zwingend auf dem Mac neu verifizieren.**
+> ⚠️ **Warnhinweis (Stand 2026-07-23) — eine offene Verifikation verbleibt:**
+> 1. **Obsidian-Skill-Dateien: bestätigt vorhanden.** `ls -la
+>    ~/.claude/skills/` auf dem echten Mac (2026-07-23) zeigt alle 5 Ordner
+>    (`defuddle`, `json-canvas`, `obsidian-bases`, `obsidian-cli`,
+>    `obsidian-markdown`) real vorhanden — der `cp`-Befehl vom 2026-06-14
+>    hat also funktioniert. **Noch offen:** ob eine frisch gestartete
+>    lokale Claude-Code-Sitzung diese Skills im Skill-Tool auch tatsächlich
+>    auflistet (Dateipräsenz ≠ zwingend Erkennung). Check: neue Sitzung
+>    öffnen, fragen "Welche Skills hast du geladen?".
 > 2. **Workplace-Umbenennung:** Ein externes Planungsdokument (2026-07-19)
 >    nennt neue Ordnernamen (`50_FIRMEN_FINANZEN_RECHT`, `55_PRIVAT`,
 >    `60_MEDIA_INDEX`, `80_ARCHIV`, `70_DEV_TOOLS`, `20_WISSEN/Obsidian`),
