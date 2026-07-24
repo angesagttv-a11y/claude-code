@@ -36,23 +36,17 @@ DRY_RUN=0
 # Ordnernamen (Basename), die niemals als --code-root oder --vault verwendet
 # werden dürfen, egal an welcher Stelle im Workspace sie liegen.
 #
-# Stand 2026-07-19: Es gibt Hinweise auf eine Umbenennung/Neunummerierung des
-# Workplace zwischen 2026-06-13 und 2026-07-19 (z.B. 20_FIRMEN_FINANZEN_RECHT
-# -> 50_FIRMEN_FINANZEN_RECHT, 30_PRIVAT -> 55_PRIVAT, 50_MEDIEN_ASSETS ->
-# 60_MEDIA_INDEX, 70_ARCHIV_INDEX -> 80_ARCHIV). Diese Umbenennung ist NICHT
-# gegen die reale Ordnerstruktur auf dem Mac verifiziert (nur aus einem
-# externen Planungsdokument übernommen) - deshalb bewusst als Superset aus
-# alten UND neuen Namen geführt, bis das bestätigt/bereinigt ist (siehe
-# SESSION_HANDOVER_2026-07-19.md, Abschnitt 5, Punkt 1).
+# Stand 2026-07-23: Bereinigt und gegen die REALE Ordnerstruktur verifiziert
+# (`ls /Users/jessenikoi/Workplace/` auf dem echten Mac). Die alte
+# Namensgeneration (30_PRIVAT, 20_FIRMEN_FINANZEN_RECHT, 50_MEDIEN_ASSETS,
+# 70_ARCHIV_INDEX, 60_DEV_AGENTEN_TOOLS) existiert nicht mehr - der Workplace
+# wurde tatsächlich umbenannt/neu nummeriert. "PRIVAT" bleibt als generischer
+# Fallback (falls je ein Ordner ohne Nummernpräfix so heißt).
 FORBIDDEN_BASENAMES=(
-  "30_PRIVAT"
   "PRIVAT"
   "55_PRIVAT"
-  "20_FIRMEN_FINANZEN_RECHT"
   "50_FIRMEN_FINANZEN_RECHT"
-  "50_MEDIEN_ASSETS"
   "60_MEDIA_INDEX"
-  "70_ARCHIV_INDEX"
   "80_ARCHIV"
   "10_AKTIV"
 )
@@ -161,7 +155,7 @@ guard_forbidden_path() {
   done
 
   case "$normalized" in
-    */30_PRIVAT/*|*/PRIVAT/*|*/55_PRIVAT/*|*/20_FIRMEN_FINANZEN_RECHT/*|*/50_FIRMEN_FINANZEN_RECHT/*|*/50_MEDIEN_ASSETS/*|*/60_MEDIA_INDEX/*|*/70_ARCHIV_INDEX/*|*/80_ARCHIV/*|*/10_AKTIV/*)
+    */PRIVAT/*|*/55_PRIVAT/*|*/50_FIRMEN_FINANZEN_RECHT/*|*/60_MEDIA_INDEX/*|*/80_ARCHIV/*|*/10_AKTIV/*)
       echo "ABBRUCH: Pfad liegt innerhalb eines gesperrten Bereichs: $normalized" >&2
       exit 1
       ;;

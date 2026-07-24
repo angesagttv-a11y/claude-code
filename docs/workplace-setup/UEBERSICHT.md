@@ -36,7 +36,7 @@ Gebrauchsanleitung.
 | Obsidian-Vault in Obsidian geöffnet/initialisiert (`.obsidian/`) | ✅ **bestätigt (2026-06-13/14, per Screenshot)** | Vault ist aktiv geladen, voll ausgebaute Struktur vorhanden |
 | Obsidian-Skills (`kepano/obsidian-skills`, 5 Skills) global installiert | ⚠️ **Dateien auf der Platte bestätigt (2026-07-23, per `ls -la` auf dem Mac) — Skill-Tool-Erkennung in einer frischen Sitzung noch offen** | `~/.claude/skills/{defuddle,json-canvas,obsidian-bases,obsidian-cli,obsidian-markdown}` real vorhanden |
 | `graphify-out/` nicht versioniert, Repo sauber | ✅ **bestätigt (2026-07-19)** | `.gitignore` enthält `graphify-out/`, keine getrackten Graphify-Dateien im Repo |
-| Safety Guard an gemeldete Umbenennung angepasst (Superset, unverifiziert) | ✅ **erledigt (2026-07-19)** | `scripts/setup-graphify-workplace.sh` — siehe Warnhinweis unten |
+| Safety Guard an reale Workplace-Struktur angepasst | ✅ **bereinigt & verifiziert (2026-07-23)** | `scripts/setup-graphify-workplace.sh` — echte Ordnernamen bestätigt, Alt-Namen entfernt |
 | Obsidian-Backup-Strategie geklärt (offizielle Doku ausgewertet) | ✅ **Empfehlung fertig (2026-07-19), Ausführung auf dem Mac noch offen** | siehe Abschnitt 6, `templates/obsidian-vault.gitignore.template` |
 | Plaud per MCP anbinden | ✅ **offizieller Weg recherchiert (2026-07-19), Einrichtung noch offen** | siehe Abschnitt 7 — offizieller Plaud-MCP-Server existiert |
 | WhatsApp-Import in Vault ("Mozepp") | ✅ **Workflow fertig (2026-07-19), Ausführung auf dem Mac noch offen** | bereits manuell exportierte Chats → `80_ARCHIV/Chat-Archiv/WhatsApp/`, Prompt in `SESSION_HANDOVER_2026-07-19.md` Abschnitt 9 |
@@ -65,17 +65,31 @@ Zusatz-Skills.
 >    lokale Claude-Code-Sitzung diese Skills im Skill-Tool auch tatsächlich
 >    auflistet (Dateipräsenz ≠ zwingend Erkennung). Check: neue Sitzung
 >    öffnen, fragen "Welche Skills hast du geladen?".
-> 2. **Workplace-Umbenennung:** Ein externes Planungsdokument (2026-07-19)
->    nennt neue Ordnernamen (`50_FIRMEN_FINANZEN_RECHT`, `55_PRIVAT`,
->    `60_MEDIA_INDEX`, `80_ARCHIV`, `70_DEV_TOOLS`, `20_WISSEN/Obsidian`),
->    die von den bisher dokumentierten Namen (`20_FIRMEN_FINANZEN_RECHT`,
->    `30_PRIVAT`, `50_MEDIEN_ASSETS`, `70_ARCHIV_INDEX`,
->    `60_DEV_AGENTEN_TOOLS`) abweichen. **Diese neuen Namen sind nicht gegen
->    die reale Mac-Struktur verifiziert** — der Safety Guard führt seit
->    2026-07-19 vorsorglich beide Namensgenerationen als Superset (sicherer,
->    aber möglicherweise unnötig breit). Auf dem Mac `ls
->    /Users/jessenikoi/Workplace/` ausführen und melden, welche Namen aktuell
->    real existieren, damit die Liste bereinigt werden kann.
+> 2. **Workplace-Umbenennung: bestätigt und bereinigt (2026-07-23).** `ls
+>    /Users/jessenikoi/Workplace/` auf dem echten Mac zeigt die reale,
+>    aktuelle Struktur:
+>    ```text
+>    00_INBOX  02_KONTEXT_SITZUNGEN  10_AKTIV  20_WISSEN  30_AGENTS
+>    40_KUNDEN_PARTNER  50_FIRMEN_FINANZEN_RECHT  55_PRIVAT
+>    60_MEDIA_INDEX  70_DEV_TOOLS  80_ARCHIV  99_SYSTEM
+>    AGENTS.md  Daily  Obsidian  README.md
+>    ```
+>    Die neuen Namen aus dem externen Plan waren korrekt, die alten
+>    (`20_FIRMEN_FINANZEN_RECHT`, `30_PRIVAT`, `50_MEDIEN_ASSETS`,
+>    `70_ARCHIV_INDEX`, `60_DEV_AGENTEN_TOOLS`) existieren nicht mehr — der
+>    Workplace wurde tatsächlich umbenannt/neu strukturiert. Safety Guard in
+>    `scripts/setup-graphify-workplace.sh` ist entsprechend bereinigt (siehe
+>    Abschnitt 5). **Eine Behauptung aus dem externen Plan war falsch:**
+>    Obsidian liegt direkt unter `Workplace/Obsidian` (Top-Level), **nicht**
+>    unter `20_WISSEN/Obsidian` wie dort vermutet.
+>    **Neu und noch nicht eingeordnet:** `00_INBOX`, `02_KONTEXT_SITZUNGEN`,
+>    `20_WISSEN`, `30_AGENTS`, `40_KUNDEN_PARTNER`, `99_SYSTEM`, `Daily`,
+>    `AGENTS.md`, `README.md` — existieren jetzt zusätzlich, waren in keiner
+>    bisherigen Doku beschrieben. Offene Rückfrage unten.
+> 3. **Obsidian-Skill-Erkennung im Skill-Tool:** Dateien auf der Platte sind
+>    bestätigt vorhanden (siehe Statustabelle), aber ob eine frisch
+>    gestartete lokale Claude-Code-Sitzung sie im Skill-Tool auflistet, ist
+>    noch nicht gemeldet worden.
 
 ### Obsidian-Skills — Installationsdetails (2026-06-14)
 
@@ -145,14 +159,14 @@ zu kopieren und dort mit dem jeweiligen Code-Root/Graphify-Output zu verlinken.
 ## 1. Use-Case: Wofür ist das Ganze?
 
 Du hast einen organisch gewachsenen, nummerierten Workplace
-(`00_..`, `10_AKTIV`, `20_..`, ..., `60_DEV_AGENTEN_TOOLS`, `Obsidian/`, ...)
+(`00_..`, `10_AKTIV`, `20_..`, ..., `70_DEV_TOOLS`, `Obsidian/`, ...)
 mit:
 
 - **Projektankern** in `10_AKTIV/<Projekt_X>/` (operative Landkarten mit
   `PROJEKT.md`, `00_Eingang/`, Reviews) - **keine** Code-Repos.
 - Einem **Obsidian-Vault** unter `Obsidian/` für kuratiertes Dauer-Wissen
   (`10_PROJEKTE`, `40_ENTSCHEIDUNGEN`, `50_OFFENE_FRAGEN`, `60_PROZESSE_SOPS`, ...).
-- Einem **Dev-Bereich** `60_DEV_AGENTEN_TOOLS/`, in dem echte Code-Repos für
+- Einem **Dev-Bereich** `70_DEV_TOOLS/`, in dem echte Code-Repos für
   verschiedene Agenten (Claude, Codex, Manus, ...) liegen oder verlinkt sind.
 
 **Ziel:** Diese drei Werkzeuge sinnvoll verzahnen, ohne die bestehende
@@ -216,7 +230,7 @@ Skript passieren**, sonst bricht das Skript beim Vault-Schritt ab.
 
 ### Schritt 3: Dry-Run gegen einen Code-Root
 
-Wähle ein Projekt aus `60_DEV_AGENTEN_TOOLS/`, z.B. dein Codex-Projekt.
+Wähle ein Projekt aus `70_DEV_TOOLS/`, z.B. dein Codex-Projekt.
 Mit `--workspace-root` aktivierst du zusätzlich den Schutz "Workspace-Root
 selbst darf kein Ziel sein" (siehe Abschnitt 5):
 
@@ -224,7 +238,7 @@ selbst darf kein Ziel sein" (siehe Abschnitt 5):
 ./scripts/setup-graphify-workplace.sh \
     --workspace-root "$HOME/Workplace" \
     --vault     "$HOME/Workplace/Obsidian" \
-    --code-root "$HOME/Workplace/60_DEV_AGENTEN_TOOLS/<dein-projekt>" \
+    --code-root "$HOME/Workplace/70_DEV_TOOLS/<dein-projekt>" \
     --platform claude --platform codex \
     --dry-run
 ```
@@ -239,7 +253,7 @@ bricht das Skript sofort mit `ABBRUCH: ...` ab.
 ./scripts/setup-graphify-workplace.sh \
     --workspace-root "$HOME/Workplace" \
     --vault     "$HOME/Workplace/Obsidian" \
-    --code-root "$HOME/Workplace/60_DEV_AGENTEN_TOOLS/<dein-projekt>" \
+    --code-root "$HOME/Workplace/70_DEV_TOOLS/<dein-projekt>" \
     --platform claude --platform codex
 ```
 
@@ -255,7 +269,7 @@ Das Skript:
 Im Code-Root, mit Claude Code:
 
 ```bash
-cd "$HOME/Workplace/60_DEV_AGENTEN_TOOLS/<dein-projekt>"
+cd "$HOME/Workplace/70_DEV_TOOLS/<dein-projekt>"
 /graphify .
 ```
 
@@ -285,23 +299,27 @@ Ausführen überschreibt nichts Bestehendes.
 ## 4. Was als Nächstes ansteht (auf deinem Mac, nicht hier)
 
 Schritte 1-4 (Repo pullen, Skript, `/graphify .`) sind für den ersten
-Code-Root (`claude-code` selbst) bereits erledigt (2026-06-13). Vault ist
-initialisiert, Obsidian-Skills sind kopiert. **Stand 2026-07-19: bewusste
-Stabilisierungs-Priorität, siehe `SESSION_HANDOVER_2026-07-19.md` für die
-vollständige Reihenfolge.** Kurzfassung, in dieser Reihenfolge:
+Code-Root (`claude-code` selbst) bereits erledigt (2026-06-13, damals unter
+dem inzwischen umbenannten Pfad `60_DEV_AGENTEN_TOOLS/02_Claude/`). Vault
+ist initialisiert, Obsidian-Skills sind auf der Platte bestätigt, die
+reale Workplace-Struktur ist verifiziert (siehe Abschnitt 0). **Stand
+2026-07-23:** nur noch eine offene Verifikation, plus eine neue
+Rückfrage. Kurzfassung, in dieser Reihenfolge:
 
-1. **Zuerst:** Obsidian-Skill-Erkennung lokal verifizieren (Claude Code
-   komplett neu starten, dann `ls -la ~/.claude/skills/` UND prüfen, ob die
-   5 Skills im Skill-Tool auftauchen — siehe Warnhinweis in Abschnitt 0).
-2. **Dann:** Reale Workplace-Ordnernamen bestätigen (`ls
-   /Users/jessenikoi/Workplace/`) und den Safety Guard in Abschnitt 5
-   entsprechend bereinigen (aktuell bewusst breiter Superset).
-3. Obsidian-Git-/Backup-Strategie festlegen (Vault versionieren? Was
-   ausschließen — `.obsidian/workspace.json`, Roh-Archive, große Exporte,
-   Graphify-HTMLs/Caches?).
+1. **Zuerst:** Obsidian-Skill-**Erkennung** in einer frisch gestarteten
+   lokalen Claude-Code-Sitzung prüfen ("Welche Skills hast du geladen?") —
+   die Dateien sind bestätigt vorhanden, das Skill-Tool wurde aber noch
+   nicht gegengeprüft (siehe Warnhinweis in Abschnitt 0).
+2. **Offene Rückfrage:** Ist `40_KUNDEN_PARTNER` schützenswert (wie früher
+   `FIRMEN_FINANZEN_RECHT`) und sollte in den Safety Guard aufgenommen
+   werden? Und: liegt der `claude-code`-Code-Root jetzt unter
+   `70_DEV_TOOLS/...` — falls ja, unter welchem genauen Unterpfad?
+3. Obsidian-Git-/Backup-Strategie umsetzen (Empfehlung + Template stehen
+   bereits in Abschnitt 6, `git init` im Vault noch nicht ausgeführt).
 4. Vault-Übersichtsnotiz aus dem Template anlegen und verlinken.
 5. Erst danach: zweiter echter Code-Root (nicht `10_AKTIV`, sondern ein
-   echtes Git-/Dev-Repo) — Schritte 3-7 aus Abschnitt 3 wiederholen.
+   echtes Git-/Dev-Repo unter `70_DEV_TOOLS/`) — Schritte 3-7 aus
+   Abschnitt 3 wiederholen.
 6. Erst danach: optionale Zusatz-Skills (`qmd`, `obsidian-second-brain`)
    neu bewerten, falls gewünscht.
 
@@ -315,23 +333,21 @@ Details und Hintergründe stehen in
 entspricht oder darunter liegt - egal an welcher Stelle im Baum:
 
 ```text
-30_PRIVAT
 PRIVAT
 55_PRIVAT
-20_FIRMEN_FINANZEN_RECHT
 50_FIRMEN_FINANZEN_RECHT
-50_MEDIEN_ASSETS
 60_MEDIA_INDEX
-70_ARCHIV_INDEX
 80_ARCHIV
 10_AKTIV
 ```
 
-*(Stand 2026-07-19: bewusst als Superset aus zwei Namensgenerationen geführt
-— alte Namen aus der Sitzung vom 2026-06-13 plus neu gemeldete, noch nicht
-gegen die reale Mac-Struktur verifizierte Namen. Siehe Warnhinweis in
-Abschnitt 0. Sobald bestätigt, welche Namen aktuell real existieren, kann
-die Liste bereinigt werden.)*
+*(Stand 2026-07-23: bereinigt und gegen die reale Workplace-Struktur
+verifiziert, siehe Warnhinweis in Abschnitt 0. Die alte Namensgeneration
+aus der Sitzung vom 2026-06-13 existiert nicht mehr und wurde entfernt.
+"PRIVAT" bleibt als generischer Fallback ohne Nummernpräfix. Noch nicht
+eingeordnet: `40_KUNDEN_PARTNER` — plausibel schützenswert wie früher
+`FIRMEN_FINANZEN_RECHT`, aber nicht bestätigt, siehe offene Rückfrage in
+Abschnitt 0.)*
 
 Zusätzlich: Wird `--workspace-root <pfad>` gesetzt (empfohlen, siehe Schritt 3),
 lehnt das Skript auch den Workspace-Root selbst als Ziel-/Scan-Root ab.
@@ -349,9 +365,11 @@ Getestet (2026-06-13, in dieser Sandbox, mit anonymisierter Beispielstruktur,
 alte Namensliste): erlaubter Code-Root läuft im Dry-Run durch; alle acht
 gesperrten Pfade brechen mit `ABBRUCH: ...` ab.
 
-**Erneut getestet (2026-07-19, nach Erweiterung der Namensliste):** ein neu
-hinzugefügter gesperrter Name (`60_MEDIA_INDEX`) blockt korrekt im Dry-Run;
-ein weiterhin erlaubter Testpfad läuft weiterhin fehlerfrei durch
+**Erneut getestet (2026-07-23, nach Bereinigung auf die reale
+Namensliste):** ein echter gesperrter Name (`50_FIRMEN_FINANZEN_RECHT`)
+blockt korrekt im Dry-Run; ein jetzt nicht mehr existenter Alt-Name
+(`20_FIRMEN_FINANZEN_RECHT`) blockt zu Recht nicht mehr; ein echter
+erlaubter Code-Root unter `70_DEV_TOOLS/` läuft fehlerfrei durch
 (`bash -n` Syntaxcheck zusätzlich grün).
 
 ## 6. Obsidian — offizielle Doku-Erkenntnisse & Backup-Entscheidung (2026-07-19)
