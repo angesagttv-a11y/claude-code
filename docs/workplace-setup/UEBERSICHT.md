@@ -9,7 +9,7 @@ Gebrauchsanleitung.
 
 ## 0. Status: Was ist umgesetzt - und was nicht?
 
-*(Letzter Abgleich: 2026-07-19, siehe `SESSION_HANDOVER_2026-07-19.md` für Details. Diese Sitzung war bewusst eine Stabilisierungs-Runde, kein weiterer Tool-Ausbau.)*
+*(Letzter Abgleich: 2026-07-24, siehe `SESSION_HANDOVER_2026-07-24.md` für den vollständigen, konsolidierten Verlauf seit dem 19. Juli. Diese Sitzungsreihe war bewusst Stabilisierung statt Tool-Ausbau.)*
 
 > ⚠️ **Warnhinweis (neu, 2026-07-19):** Graphify darf **niemals** direkt auf
 > `10_AKTIV` (oder Umbenennungen davon) laufen — `10_AKTIV` ist reine
