@@ -34,7 +34,7 @@ Gebrauchsanleitung.
 | Graphify-Skill installiert (claude + codex) | ✅ erledigt (2026-06-13) | `.claude/skills/graphify/`, `.codex/skills/graphify/` |
 | `graphify-out/` aus Git ausgeschlossen | ✅ erledigt | `.gitignore` |
 | Obsidian-Vault in Obsidian geöffnet/initialisiert (`.obsidian/`) | ✅ **bestätigt (2026-06-13/14, per Screenshot)** | Vault ist aktiv geladen, voll ausgebaute Struktur vorhanden |
-| Obsidian-Skills (`kepano/obsidian-skills`, 5 Skills) global installiert | ⚠️ **Dateien auf der Platte bestätigt (2026-07-23, per `ls -la` auf dem Mac) — Skill-Tool-Erkennung in einer frischen Sitzung noch offen** | `~/.claude/skills/{defuddle,json-canvas,obsidian-bases,obsidian-cli,obsidian-markdown}` real vorhanden |
+| Obsidian-Skills — praktischer Funktionstest im echten Vault | ✅ **bestanden (2026-07-23)** | Test-Notiz `00_INBOX/test-skill-check.md` mit korrektem Frontmatter, Wikilink und Callout real im Vault erzeugt und vom Nutzer in der echten Obsidian-App bestätigt gesehen. Offen bleibt nur die genaue Präzisierung, über welche App (Claude Code vs. Claude-Desktop-App/Connector) — ändert nichts am bewiesenen Ergebnis. |
 | `graphify-out/` nicht versioniert, Repo sauber | ✅ **bestätigt (2026-07-19)** | `.gitignore` enthält `graphify-out/`, keine getrackten Graphify-Dateien im Repo |
 | Safety Guard an reale Workplace-Struktur angepasst | ✅ **bereinigt & verifiziert (2026-07-23)** | `scripts/setup-graphify-workplace.sh` — echte Ordnernamen bestätigt, Alt-Namen entfernt |
 | Obsidian-Backup-Strategie geklärt (offizielle Doku ausgewertet) | ✅ **Empfehlung fertig (2026-07-19), Ausführung auf dem Mac noch offen** | siehe Abschnitt 6, `templates/obsidian-vault.gitignore.template` |
@@ -45,26 +45,32 @@ Gebrauchsanleitung.
 | Zusatz-Skills `qmd` (semantische Suche) und `obsidian-second-brain` | ⏸️ **bewusst zurückgestellt** | `qmd` braucht globales npm-Paket + Vault-Indexing; `obsidian-second-brain` installiert per `curl \| bash` von ungeprüftem Drittanbieter-Repo — beides erst nach expliziter Freigabe |
 | PR auf GitHub erstellt | ⏸️ bewusst nicht gemacht | Repo bleibt privater Backup-/Sync-Mechanismus |
 
-**Kurz gesagt:** Planung, Doku, Werkzeug und der erste echte Graphify-
-Durchlauf sind erledigt. Der Vault ist nachweislich initialisiert und
-bereits deutlich ausgebaut (siehe "Bestätigte reale Vault-Struktur" unten).
-**Diese Sitzung (2026-07-19) war bewusst Stabilisierung statt Ausbau:**
-Repo-Hygiene geprüft (sauber), Safety Guard defensiv erweitert, Doku
-korrigiert. Weiterhin offen und **priorisiert vor jedem weiteren Schritt**:
-die Obsidian-Skill-Erkennung lokal verifizieren (siehe Warnhinweis) und die
-gemeldete Workplace-Umbenennung gegen die reale Mac-Struktur bestätigen.
-Danach erst: zweiter Code-Root, Obsidian-Git-Strategie, optionale
-Zusatz-Skills.
+**Kurz gesagt:** Planung, Doku, Werkzeug, der erste echte Graphify-Durchlauf
+UND jetzt auch der praktische Funktionstest im echten Vault sind erledigt.
+Der Vault ist nachweislich initialisiert und bereits deutlich ausgebaut
+(siehe "Bestätigte reale Vault-Struktur" unten). **Diese Sitzung
+(2026-07-19/23) war bewusst Stabilisierung statt Ausbau:** Repo-Hygiene
+geprüft (sauber), Safety Guard defensiv erweitert und dann gegen die reale
+Struktur bereinigt, Doku korrigiert, Obsidian-Skill-Funktion real im Vault
+bewiesen. Übrig bleiben nur noch kleine, nicht blockierende Detailfragen
+(siehe Warnhinweis) sowie: zweiter Code-Root, Obsidian-Git-Strategie
+ausführen, optionale Zusatz-Skills.
 
-> ⚠️ **Warnhinweis (Stand 2026-07-23) — eine offene Verifikation verbleibt:**
-> 1. **Obsidian-Skill-Dateien: bestätigt vorhanden.** `ls -la
->    ~/.claude/skills/` auf dem echten Mac (2026-07-23) zeigt alle 5 Ordner
->    (`defuddle`, `json-canvas`, `obsidian-bases`, `obsidian-cli`,
->    `obsidian-markdown`) real vorhanden — der `cp`-Befehl vom 2026-06-14
->    hat also funktioniert. **Noch offen:** ob eine frisch gestartete
->    lokale Claude-Code-Sitzung diese Skills im Skill-Tool auch tatsächlich
->    auflistet (Dateipräsenz ≠ zwingend Erkennung). Check: neue Sitzung
->    öffnen, fragen "Welche Skills hast du geladen?".
+> ⚠️ **Warnhinweis (Stand 2026-07-23) — nur noch kleine Detailfragen:**
+> 1. **Obsidian-Skill-Funktion: bewiesen.** Praktischer Test bestanden —
+>    eine Test-Notiz mit korrektem Frontmatter, Wikilink und Callout wurde
+>    real im Vault erzeugt und vom Nutzer in der echten Obsidian-App
+>    bestätigt gesehen (2026-07-23). **Kleine offene Detailfrage:** Der
+>    Test lief über die "Desktop-App" — unklar, ob damit Claude Code (liest
+>    aus `~/.claude/skills/`, wo wir per `cp` installiert haben) oder die
+>    allgemeine Claude.ai-Desktop-App mit einem separaten Connector/
+>    Cowork-Skill-Mechanismus gemeint ist. Ändert nichts am bewiesenen
+>    Ergebnis, ist aber für die genaue Dokumentation offen. **Zusätzlich
+>    auffällig:** Der Bericht nannte den Pfad `20_WISSEN/Obsidian/00_INBOX/`
+>    — das widerspricht der unten verifizierten realen Struktur (Obsidian
+>    liegt Top-Level, nicht unter `20_WISSEN`). Falls das nochmal auffällt,
+>    lohnt ein kurzer Blick, ob im getesteten Tool ein anderer/falscher
+>    Vault-Pfad hinterlegt ist.
 > 2. **Workplace-Umbenennung: bestätigt und bereinigt (2026-07-23).** `ls
 >    /Users/jessenikoi/Workplace/` auf dem echten Mac zeigt die reale,
 >    aktuelle Struktur:
@@ -86,10 +92,9 @@ Zusatz-Skills.
 >    `20_WISSEN`, `30_AGENTS`, `40_KUNDEN_PARTNER`, `99_SYSTEM`, `Daily`,
 >    `AGENTS.md`, `README.md` — existieren jetzt zusätzlich, waren in keiner
 >    bisherigen Doku beschrieben. Offene Rückfrage unten.
-> 3. **Obsidian-Skill-Erkennung im Skill-Tool:** Dateien auf der Platte sind
->    bestätigt vorhanden (siehe Statustabelle), aber ob eine frisch
->    gestartete lokale Claude-Code-Sitzung sie im Skill-Tool auflistet, ist
->    noch nicht gemeldet worden.
+> 3. **Offene Rückfragen an den Nutzer:** Ist `40_KUNDEN_PARTNER`
+>    schützenswert und gehört in den Safety Guard? Unter welchem genauen
+>    Unterpfad liegt der `claude-code`-Code-Root jetzt unter `70_DEV_TOOLS/`?
 
 ### Obsidian-Skills — Installationsdetails (2026-06-14)
 
