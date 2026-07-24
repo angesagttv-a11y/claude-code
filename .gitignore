@@ -1,2 +1,5 @@
 .DS_Store
 
+# Graphify: lokale Wissensgraph-Artefakte bleiben projektlokal, nicht im Git
+graphify-out/
+

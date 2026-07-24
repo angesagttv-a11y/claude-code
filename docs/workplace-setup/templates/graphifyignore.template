@@ -1,0 +1,39 @@
+# .graphifyignore - schließt Pfade vom Graphify-Scan aus (gitignore-Syntax).
+# In den jeweiligen Code-Root kopieren und an das Projekt anpassen.
+
+# Abhängigkeiten / Vendor
+node_modules/
+vendor/
+.venv/
+venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+
+# Build- / Dist-Artefakte
+dist/
+build/
+out/
+.next/
+target/
+
+# Graphify-Output selbst (nicht rekursiv mitscannen)
+graphify-out/
+
+# Große Medien (Video/Audio/Bilder), die den Graph aufblähen
+*.mp4
+*.mov
+*.avi
+*.wav
+*.mp3
+*.psd
+*.zip
+*.tar.gz
+
+# Lokale / sensible Bereiche
+.env
+.env.*
+*.key
+*.pem
+secrets/
+30_PRIVAT/
