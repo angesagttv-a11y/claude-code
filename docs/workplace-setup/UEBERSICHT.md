@@ -34,7 +34,7 @@ Gebrauchsanleitung.
 | Graphify-Skill installiert (claude + codex) | ✅ erledigt (2026-06-13) | `.claude/skills/graphify/`, `.codex/skills/graphify/` |
 | `graphify-out/` aus Git ausgeschlossen | ✅ erledigt | `.gitignore` |
 | Obsidian-Vault in Obsidian geöffnet/initialisiert (`.obsidian/`) | ✅ **bestätigt (2026-06-13/14, per Screenshot)** | Vault ist aktiv geladen, voll ausgebaute Struktur vorhanden |
-| Obsidian-Skills — praktischer Funktionstest im echten Vault | ✅ **bestanden (2026-07-23)** | Test-Notiz `00_INBOX/test-skill-check.md` mit korrektem Frontmatter, Wikilink und Callout real im Vault erzeugt und vom Nutzer in der echten Obsidian-App bestätigt gesehen. Offen bleibt nur die genaue Präzisierung, über welche App (Claude Code vs. Claude-Desktop-App/Connector) — ändert nichts am bewiesenen Ergebnis. |
+| Obsidian-Skills — praktischer Funktionstest im echten Vault | ✅ **bestanden, per Screenshot verifiziert (2026-07-23)** | `00_INBOX/test-skill-check.md` — Properties, Wikilink und Callout korrekt gerendert in der echten Obsidian-App |
 | `graphify-out/` nicht versioniert, Repo sauber | ✅ **bestätigt (2026-07-19)** | `.gitignore` enthält `graphify-out/`, keine getrackten Graphify-Dateien im Repo |
 | Safety Guard an reale Workplace-Struktur angepasst | ✅ **bereinigt & verifiziert (2026-07-23)** | `scripts/setup-graphify-workplace.sh` — echte Ordnernamen bestätigt, Alt-Namen entfernt |
 | Obsidian-Backup-Strategie geklärt (offizielle Doku ausgewertet) | ✅ **Empfehlung fertig (2026-07-19), Ausführung auf dem Mac noch offen** | siehe Abschnitt 6, `templates/obsidian-vault.gitignore.template` |
@@ -56,21 +56,23 @@ bewiesen. Übrig bleiben nur noch kleine, nicht blockierende Detailfragen
 (siehe Warnhinweis) sowie: zweiter Code-Root, Obsidian-Git-Strategie
 ausführen, optionale Zusatz-Skills.
 
-> ⚠️ **Warnhinweis (Stand 2026-07-23) — nur noch kleine Detailfragen:**
-> 1. **Obsidian-Skill-Funktion: bewiesen.** Praktischer Test bestanden —
->    eine Test-Notiz mit korrektem Frontmatter, Wikilink und Callout wurde
->    real im Vault erzeugt und vom Nutzer in der echten Obsidian-App
->    bestätigt gesehen (2026-07-23). **Kleine offene Detailfrage:** Der
->    Test lief über die "Desktop-App" — unklar, ob damit Claude Code (liest
->    aus `~/.claude/skills/`, wo wir per `cp` installiert haben) oder die
->    allgemeine Claude.ai-Desktop-App mit einem separaten Connector/
->    Cowork-Skill-Mechanismus gemeint ist. Ändert nichts am bewiesenen
->    Ergebnis, ist aber für die genaue Dokumentation offen. **Zusätzlich
->    auffällig:** Der Bericht nannte den Pfad `20_WISSEN/Obsidian/00_INBOX/`
->    — das widerspricht der unten verifizierten realen Struktur (Obsidian
->    liegt Top-Level, nicht unter `20_WISSEN`). Falls das nochmal auffällt,
->    lohnt ein kurzer Blick, ob im getesteten Tool ein anderer/falscher
->    Vault-Pfad hinterlegt ist.
+> ⚠️ **Warnhinweis (Stand 2026-07-23) — Obsidian-Skill-Frage vollständig
+> abgeschlossen:**
+> 1. **Obsidian-Skill-Funktion: zweifelsfrei bewiesen, per Screenshot.** Der
+>    Nutzer hat die echte Obsidian-App gezeigt: die Test-Notiz
+>    `00_INBOX/test-skill-check.md` rendert korrekt getypte Properties
+>    (`date` als echtes Datumsfeld, `tags` als Tag-Pill), einen echten
+>    klickbaren Wikilink und einen grün gerenderten Callout mit
+>    Häkchen-Icon. Das ist direkter visueller Beweis, unabhängig davon,
+>    welche App/welcher Mechanismus die Datei geschrieben hat — die
+>    vorherige Detailfrage (Claude Code vs. Claude-Desktop-App) ist damit
+>    gegenstandslos.
+>    **Neu entdeckt (nicht dringend, nur zur Kenntnis):** `00_INBOX`
+>    enthält bereits einen Ordner `WhatsApp_Extrakte/`, `01_DAILY_NOTES`
+>    bereits `Plaud_Transkripte/` — beide Integrationen scheinen in
+>    irgendeiner Form schon vorbereitet/genutzt zu werden, anders als der
+>    Stand in Abschnitt 7 vermuten ließ. Bei Gelegenheit mit dem Nutzer
+>    klären, was dort bereits liegt.
 > 2. **Workplace-Umbenennung: bestätigt und bereinigt (2026-07-23).** `ls
 >    /Users/jessenikoi/Workplace/` auf dem echten Mac zeigt die reale,
 >    aktuelle Struktur:
