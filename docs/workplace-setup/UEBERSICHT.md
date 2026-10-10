@@ -94,9 +94,12 @@ ausführen, optionale Zusatz-Skills.
 >    `20_WISSEN`, `30_AGENTS`, `40_KUNDEN_PARTNER`, `99_SYSTEM`, `Daily`,
 >    `AGENTS.md`, `README.md` — existieren jetzt zusätzlich, waren in keiner
 >    bisherigen Doku beschrieben. Offene Rückfrage unten.
-> 3. **Offene Rückfragen an den Nutzer:** Ist `40_KUNDEN_PARTNER`
->    schützenswert und gehört in den Safety Guard? Unter welchem genauen
->    Unterpfad liegt der `claude-code`-Code-Root jetzt unter `70_DEV_TOOLS/`?
+> 3. **Offene Rückfrage an den Nutzer (teilweise beantwortet 2026-10-10):**
+>    ~~Ist `40_KUNDEN_PARTNER` schützenswert und gehört in den Safety
+>    Guard?~~ → **Ja, bestätigt.** `40_KUNDEN_PARTNER` ist seit 2026-10-10
+>    Teil der `FORBIDDEN_BASENAMES`-Liste, getestet (Dry-Run blockt
+>    korrekt). Weiterhin offen: Unter welchem genauen Unterpfad liegt der
+>    `claude-code`-Code-Root jetzt unter `70_DEV_TOOLS/`?
 
 ### Obsidian-Skills — Installationsdetails (2026-06-14)
 
@@ -308,22 +311,20 @@ Ausführen überschreibt nichts Bestehendes.
 Schritte 1-4 (Repo pullen, Skript, `/graphify .`) sind für den ersten
 Code-Root (`claude-code` selbst) bereits erledigt (2026-06-13, damals unter
 dem inzwischen umbenannten Pfad `60_DEV_AGENTEN_TOOLS/02_Claude/`). Vault
-ist initialisiert, Obsidian-Skills sind auf der Platte bestätigt, die
-reale Workplace-Struktur ist verifiziert (siehe Abschnitt 0). **Stand
-2026-07-23:** nur noch eine offene Verifikation, plus eine neue
-Rückfrage. Kurzfassung, in dieser Reihenfolge:
+ist initialisiert, Obsidian-Skills sind per Screenshot im echten Vault
+funktionsfähig bewiesen (2026-07-24), die reale Workplace-Struktur ist
+verifiziert (siehe Abschnitt 0). **Stand 2026-10-10:** Der Safety Guard
+ist vollständig — `40_KUNDEN_PARTNER` wurde vom Nutzer bestätigt und
+aufgenommen. Kurzfassung, in dieser Reihenfolge:
 
-1. **Zuerst:** Obsidian-Skill-**Erkennung** in einer frisch gestarteten
-   lokalen Claude-Code-Sitzung prüfen ("Welche Skills hast du geladen?") —
-   die Dateien sind bestätigt vorhanden, das Skill-Tool wurde aber noch
-   nicht gegengeprüft (siehe Warnhinweis in Abschnitt 0).
-2. **Offene Rückfrage:** Ist `40_KUNDEN_PARTNER` schützenswert (wie früher
-   `FIRMEN_FINANZEN_RECHT`) und sollte in den Safety Guard aufgenommen
-   werden? Und: liegt der `claude-code`-Code-Root jetzt unter
-   `70_DEV_TOOLS/...` — falls ja, unter welchem genauen Unterpfad?
-3. Obsidian-Git-/Backup-Strategie umsetzen (Empfehlung + Template stehen
+1. **Offene Rückfrage:** Unter welchem genauen Unterpfad liegt der
+   `claude-code`-Code-Root jetzt unter `70_DEV_TOOLS/`?
+2. Obsidian-Git-/Backup-Strategie umsetzen (Empfehlung + Template stehen
    bereits in Abschnitt 6, `git init` im Vault noch nicht ausgeführt).
-4. Vault-Übersichtsnotiz aus dem Template anlegen und verlinken.
+3. Vault-Übersichtsnotiz aus dem Template anlegen und verlinken.
+4. Die Graphify→Obsidian-Bridge (`--obsidian-dir`) einmal real testen —
+   bisher nie ausgeführt (siehe `SESSION_HANDOVER_2026-07-24.md`,
+   Abschnitt 5/6).
 5. Erst danach: zweiter echter Code-Root (nicht `10_AKTIV`, sondern ein
    echtes Git-/Dev-Repo unter `70_DEV_TOOLS/`) — Schritte 3-7 aus
    Abschnitt 3 wiederholen.
@@ -346,15 +347,15 @@ PRIVAT
 60_MEDIA_INDEX
 80_ARCHIV
 10_AKTIV
+40_KUNDEN_PARTNER
 ```
 
-*(Stand 2026-07-23: bereinigt und gegen die reale Workplace-Struktur
-verifiziert, siehe Warnhinweis in Abschnitt 0. Die alte Namensgeneration
-aus der Sitzung vom 2026-06-13 existiert nicht mehr und wurde entfernt.
-"PRIVAT" bleibt als generischer Fallback ohne Nummernpräfix. Noch nicht
-eingeordnet: `40_KUNDEN_PARTNER` — plausibel schützenswert wie früher
-`FIRMEN_FINANZEN_RECHT`, aber nicht bestätigt, siehe offene Rückfrage in
-Abschnitt 0.)*
+*(Stand 2026-10-10: `40_KUNDEN_PARTNER` vom Nutzer bestätigt und
+aufgenommen, getestet per Dry-Run. Davor, Stand 2026-07-23: bereinigt und
+gegen die reale Workplace-Struktur verifiziert, siehe Warnhinweis in
+Abschnitt 0. Die alte Namensgeneration aus der Sitzung vom 2026-06-13
+existiert nicht mehr und wurde entfernt. "PRIVAT" bleibt als generischer
+Fallback ohne Nummernpräfix.)*
 
 Zusätzlich: Wird `--workspace-root <pfad>` gesetzt (empfohlen, siehe Schritt 3),
 lehnt das Skript auch den Workspace-Root selbst als Ziel-/Scan-Root ab.
@@ -378,6 +379,11 @@ blockt korrekt im Dry-Run; ein jetzt nicht mehr existenter Alt-Name
 (`20_FIRMEN_FINANZEN_RECHT`) blockt zu Recht nicht mehr; ein echter
 erlaubter Code-Root unter `70_DEV_TOOLS/` läuft fehlerfrei durch
 (`bash -n` Syntaxcheck zusätzlich grün).
+
+**Erneut getestet (2026-10-10, nach Aufnahme von `40_KUNDEN_PARTNER`):**
+`40_KUNDEN_PARTNER` blockt korrekt im Dry-Run; ein weiterhin erlaubter
+Testpfad unter `70_DEV_TOOLS/` läuft fehlerfrei durch (`bash -n`
+Syntaxcheck zusätzlich grün).
 
 ## 6. Obsidian — offizielle Doku-Erkenntnisse & Backup-Entscheidung (2026-07-19)
 
