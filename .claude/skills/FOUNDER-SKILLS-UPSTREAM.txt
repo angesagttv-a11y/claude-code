@@ -1,0 +1,3 @@
+Source: https://github.com/Jakeschincariol/founder-skill
+Pinned commit: fd9385b0cfe1b96bebce3898fbd506d73eff5a9d
+Installed as: project-local Claude Code skills
