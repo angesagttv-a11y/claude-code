@@ -1,5 +1,8 @@
 .DS_Store
 
 # Graphify: lokale Wissensgraph-Artefakte bleiben projektlokal, nicht im Git
+# graphify-out/ = ältere Graphify-Versionen; .graphify/ = neuere Versionen
+# legen den Graph dort ab (entdeckt 2026-11-08, siehe SESSION_HANDOVER).
 graphify-out/
+.graphify/
 
