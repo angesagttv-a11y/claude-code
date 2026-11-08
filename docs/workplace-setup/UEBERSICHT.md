@@ -94,12 +94,18 @@ ausführen, optionale Zusatz-Skills.
 >    `20_WISSEN`, `30_AGENTS`, `40_KUNDEN_PARTNER`, `99_SYSTEM`, `Daily`,
 >    `AGENTS.md`, `README.md` — existieren jetzt zusätzlich, waren in keiner
 >    bisherigen Doku beschrieben. Offene Rückfrage unten.
-> 3. **Offene Rückfrage an den Nutzer (teilweise beantwortet 2026-10-10):**
+> 3. **Offene Rückfragen an den Nutzer — beide jetzt beantwortet
+>    (Stand 2026-11-08):**
 >    ~~Ist `40_KUNDEN_PARTNER` schützenswert und gehört in den Safety
->    Guard?~~ → **Ja, bestätigt.** `40_KUNDEN_PARTNER` ist seit 2026-10-10
+>    Guard?~~ → **Ja, bestätigt (2026-10-10).** `40_KUNDEN_PARTNER` ist
 >    Teil der `FORBIDDEN_BASENAMES`-Liste, getestet (Dry-Run blockt
->    korrekt). Weiterhin offen: Unter welchem genauen Unterpfad liegt der
->    `claude-code`-Code-Root jetzt unter `70_DEV_TOOLS/`?
+>    korrekt). ~~Unter welchem genauen Unterpfad liegt der
+>    `claude-code`-Code-Root jetzt unter `70_DEV_TOOLS/`?~~ → **Bestätigt
+>    (2026-11-08, per Manus verifiziert):**
+>    `/Users/jessenikoi/Workplace/70_DEV_TOOLS/02_Claude/claude-code` —
+>    Remote und Branch gegengeprüft, stimmen exakt
+>    (`github.com/angesagttv-a11y/claude-code`,
+>    `claude/graphify-install-setup-5y5u3r`).
 
 ### Obsidian-Skills — Installationsdetails (2026-06-14)
 
@@ -309,27 +315,34 @@ Ausführen überschreibt nichts Bestehendes.
 ## 4. Was als Nächstes ansteht (auf deinem Mac, nicht hier)
 
 Schritte 1-4 (Repo pullen, Skript, `/graphify .`) sind für den ersten
-Code-Root (`claude-code` selbst) bereits erledigt (2026-06-13, damals unter
-dem inzwischen umbenannten Pfad `60_DEV_AGENTEN_TOOLS/02_Claude/`). Vault
-ist initialisiert, Obsidian-Skills sind per Screenshot im echten Vault
+Code-Root bereits erledigt (2026-06-13). **Bestätigter aktueller Pfad
+(2026-11-08, per Manus verifiziert):**
+`/Users/jessenikoi/Workplace/70_DEV_TOOLS/02_Claude/claude-code`
+(Remote `github.com/angesagttv-a11y/claude-code`, Branch
+`claude/graphify-install-setup-5y5u3r` — stimmen exakt). Vault ist
+initialisiert, Obsidian-Skills sind per Screenshot im echten Vault
 funktionsfähig bewiesen (2026-07-24), die reale Workplace-Struktur ist
-verifiziert (siehe Abschnitt 0). **Stand 2026-10-10:** Der Safety Guard
-ist vollständig — `40_KUNDEN_PARTNER` wurde vom Nutzer bestätigt und
-aufgenommen. Kurzfassung, in dieser Reihenfolge:
+verifiziert (siehe Abschnitt 0). **Stand 2026-11-08:** Der Safety Guard
+ist vollständig, beide offenen Rückfragen aus der Stabilisierungs-Runde
+sind beantwortet. Kurzfassung, in dieser Reihenfolge:
 
-1. **Offene Rückfrage:** Unter welchem genauen Unterpfad liegt der
-   `claude-code`-Code-Root jetzt unter `70_DEV_TOOLS/`?
-2. Obsidian-Git-/Backup-Strategie umsetzen (Empfehlung + Template stehen
+1. Obsidian-Git-/Backup-Strategie umsetzen (Empfehlung + Template stehen
    bereits in Abschnitt 6, `git init` im Vault noch nicht ausgeführt).
-3. Vault-Übersichtsnotiz aus dem Template anlegen und verlinken.
-4. Die Graphify→Obsidian-Bridge (`--obsidian-dir`) einmal real testen —
-   bisher nie ausgeführt (siehe `SESSION_HANDOVER_2026-07-24.md`,
-   Abschnitt 5/6).
-5. Erst danach: zweiter echter Code-Root (nicht `10_AKTIV`, sondern ein
+2. Vault-Übersichtsnotiz aus dem Template anlegen und verlinken.
+3. **Die Graphify→Obsidian-Bridge jetzt real testen** — bisher nie
+   ausgeführt, Pfad ist jetzt bekannt:
+   ```bash
+   cd /Users/jessenikoi/Workplace/70_DEV_TOOLS/02_Claude/claude-code
+   /graphify . --obsidian --obsidian-dir "$HOME/Workplace/Obsidian/10_PROJEKTE/claude-code/graph"
+   ```
+4. Erst danach: zweiter echter Code-Root (nicht `10_AKTIV`, sondern ein
    echtes Git-/Dev-Repo unter `70_DEV_TOOLS/`) — Schritte 3-7 aus
    Abschnitt 3 wiederholen.
-6. Erst danach: optionale Zusatz-Skills (`qmd`, `obsidian-second-brain`)
+5. Erst danach: optionale Zusatz-Skills (`qmd`, `obsidian-second-brain`)
    neu bewerten, falls gewünscht.
+6. WhatsApp-Import bewusst zurückgestellt (Nutzer-Entscheidung
+   2026-11-08) — Workflow bleibt fertig in Abschnitt 7, aber nicht
+   priorisiert.
 
 Details und Hintergründe stehen in
 [`../workplace-graphify-obsidian-setup.md`](../workplace-graphify-obsidian-setup.md).
@@ -499,6 +512,10 @@ direkt in den Vault spiegeln (gleiche Faustregel wie bei Graphify: Vault
 bekommt nur Verdichtetes).
 
 ### WhatsApp ("Mozepp-Backup") — Korrektur (2026-07-19, später am selben Tag)
+
+> ⏸️ **Bewusst zurückgestellt (2026-11-08):** Der Nutzer hat entschieden,
+> dieses Thema vorerst nicht weiterzuverfolgen. Workflow/Prompt unten
+> bleiben gültig und einsatzbereit, sind aber **nicht priorisiert**.
 
 **Richtigstellung:** Der Nutzer hat seine WhatsApp-Chats bereits manuell
 exportiert und liegen als Dateien in einem Ordner auf dem Mac. Es geht
