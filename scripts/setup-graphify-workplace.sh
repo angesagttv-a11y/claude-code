@@ -35,13 +35,23 @@ DRY_RUN=0
 
 # Ordnernamen (Basename), die niemals als --code-root oder --vault verwendet
 # werden dürfen, egal an welcher Stelle im Workspace sie liegen.
+#
+# Stand 2026-07-23: Bereinigt und gegen die REALE Ordnerstruktur verifiziert
+# (`ls /Users/jessenikoi/Workplace/` auf dem echten Mac). Die alte
+# Namensgeneration (30_PRIVAT, 20_FIRMEN_FINANZEN_RECHT, 50_MEDIEN_ASSETS,
+# 70_ARCHIV_INDEX, 60_DEV_AGENTEN_TOOLS) existiert nicht mehr - der Workplace
+# wurde tatsächlich umbenannt/neu nummeriert. "PRIVAT" bleibt als generischer
+# Fallback (falls je ein Ordner ohne Nummernpräfix so heißt).
+# Stand 2026-10-10: Nutzer hat bestätigt, dass 40_KUNDEN_PARTNER (Kunden-/
+# Partnerdaten) ebenfalls schützenswert ist - aufgenommen.
 FORBIDDEN_BASENAMES=(
-  "30_PRIVAT"
   "PRIVAT"
-  "20_FIRMEN_FINANZEN_RECHT"
-  "50_MEDIEN_ASSETS"
-  "70_ARCHIV_INDEX"
+  "55_PRIVAT"
+  "50_FIRMEN_FINANZEN_RECHT"
+  "60_MEDIA_INDEX"
+  "80_ARCHIV"
   "10_AKTIV"
+  "40_KUNDEN_PARTNER"
 )
 
 usage() {
@@ -148,7 +158,7 @@ guard_forbidden_path() {
   done
 
   case "$normalized" in
-    */30_PRIVAT/*|*/PRIVAT/*|*/20_FIRMEN_FINANZEN_RECHT/*|*/50_MEDIEN_ASSETS/*|*/70_ARCHIV_INDEX/*|*/10_AKTIV/*)
+    */PRIVAT/*|*/55_PRIVAT/*|*/50_FIRMEN_FINANZEN_RECHT/*|*/60_MEDIA_INDEX/*|*/80_ARCHIV/*|*/10_AKTIV/*|*/40_KUNDEN_PARTNER/*)
       echo "ABBRUCH: Pfad liegt innerhalb eines gesperrten Bereichs: $normalized" >&2
       exit 1
       ;;
