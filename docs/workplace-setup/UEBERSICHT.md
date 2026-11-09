@@ -618,3 +618,40 @@ mehreren Stellen hinter der Realität auf dem Mac zurück. Danach entscheiden,
 ob/wie der Daily-Refresh wieder aktiviert wird (z.B. mit automatischem
 Commit nach jedem Lauf, damit sowas nicht nochmal passieren kann, ohne
 dass es sofort auffällt).
+
+### `99_SYSTEM/SETUP-STATUS.md` gelesen (2026-11-09) — Ursache gefunden + weiterer Kontext
+
+**Ursache des Vorfalls, bereits im Juni dokumentiert, aber nicht befolgt:**
+Die Datei warnt wörtlich: *"Graphify-Gotcha: `graphify update .` ist
+AST-only und überschreibt die semantische Ebene → `/graphify . --update`
+nutzen oder Graph aus Git wiederherstellen."* Genau `graphify update .`
+(statt `/graphify . --update`) wurde beim Vorfall benutzt — der
+`scripts/graphify-daily-refresh.sh`-Automatismus macht vermutlich
+denselben Fehler jede Nacht. **Weder dieses Skript noch
+`scripts/archive_chats.py` existieren in diesem Git-Repo** (per `find`
+bestätigt) — beide leben nur lokal auf dem Mac, nie committet, genau wie
+vorher schon `.claude/skills/graphify/`.
+
+**Weiterer bisher unbekannter Kontext aus der Datei:**
+- **Dritte Memory-Schicht entdeckt:** `claude-mem` unter `~/.claude-mem`
+  (22 MB) — automatischer Cross-Session-Recall im Hintergrund
+  (`mem-search`). War uns komplett unbekannt, parallel zu Obsidian-Vault
+  und Graphify.
+- **Zusätzliches Backup bereits vorhanden:** Kopie auf externem Volume
+  `/Volumes/AGS/Obsidian_Vault_Backup_2026-06-12` (per `ditto`
+  aktualisierbar) — Time Machine nur als 🟡 Zusatznetz markiert, nicht
+  vollständig verifiziert.
+- **Cloud-Sync war Stand 12.06. bewusst offen gelassen** (GitHub privat,
+  Obsidian-Git-Plugin oder Dropbox — noch keine Entscheidung), passt zur
+  offenen Rückfrage in Abschnitt 6 dieses Dokuments.
+- **Konvention bestätigt:** `70_AGENTEN_MEMORY` nur destillierte Regeln,
+  keine Roh-Chats — Roh-Chats gehören nach `80_ARCHIV/Chat-Archiv`, exakt
+  wie wir das für WhatsApp in Abschnitt 7 schon vorgeschlagen hatten.
+- Verweist auf zwei weitere, hier noch nicht gelesene Dateien:
+  `00_START_HIER.md` und
+  `02_KONTEXT_SITZUNGEN/TUTORIAL_Graphify-Obsidian-Workflow.md`.
+
+**Nächster Schritt, bevor der Daily-Refresh wieder aktiviert wird:** Inhalt
+von `scripts/graphify-daily-refresh.sh` ansehen und bestätigen, ob er
+tatsächlich `graphify update .` statt `/graphify . --update` aufruft —
+falls ja, korrigieren, bevor `launchctl load` wieder läuft.
