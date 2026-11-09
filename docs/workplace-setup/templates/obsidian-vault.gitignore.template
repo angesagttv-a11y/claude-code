@@ -1,0 +1,38 @@
+# .gitignore-Vorlage für ein privates Git-Backup des Obsidian-Vaults selbst
+# (NICHT für dieses Setup-Repo - das ist eine Vorlage zum Kopieren nach
+# <WORKSPACE_ROOT>/Obsidian/.gitignore, falls der Vault ein eigenes,
+# separates privates Git-Repo bekommt.)
+#
+# Begründung siehe Obsidians offizielle Doku (github.com/obsidianmd/obsidian-help):
+# - "How Obsidian stores data": .obsidian/workspace.json und
+#   .obsidian/workspaces.json speichern nur das aktuelle Fenster-/Tab-Layout,
+#   ändern sich bei jedem Notiz-Öffnen und sollten bei Git-Nutzung ignoriert
+#   werden.
+# - "Back up your Obsidian files": Syncing ist KEIN Backup - dieses Repo
+#   dient als zusätzliches, echtes Backup der kuratierten Markdown-Inhalte,
+#   nicht als Ersatz für ein separates Backup-Tool.
+
+# Workspace-/Tab-Layout - ändert sich staendig, gehört nicht ins Backup
+.obsidian/workspace.json
+.obsidian/workspaces.json
+.obsidian/workspace-mobile.json
+
+# Papierkorb (gelöschte Notizen, die Obsidian noch vorhält)
+.trash/
+
+# Betriebssystem-Artefakte
+.DS_Store
+Thumbs.db
+
+# Große Rohablagen, die laut Faustregel NICHT im Vault landen sollen
+# (siehe docs/workplace-graphify-obsidian-setup.md, Abschnitt "Faustregeln"):
+# Graphify-Exporte nur, wenn bewusst über --obsidian-dir kuratiert eingebunden.
+graphify-out/
+*.graphify_cache/
+
+# Große Roh-Exporte externer Quellen (Plaud, WhatsApp, etc.) - siehe
+# UEBERSICHT.md Abschnitt "Externe Quellen anbinden": Rohdaten bewusst NICHT
+# hierher, sondern kuratiert nach 80_ARCHIV/Chat-Archiv/<Quelle>/ nur in
+# verdichteter Form. Falls doch Rohdaten temporär im Vault liegen, hier
+# gezielt ausschließen (Pfad anpassen):
+# 80_ARCHIV/Chat-Archiv/WhatsApp/_raw-export/
