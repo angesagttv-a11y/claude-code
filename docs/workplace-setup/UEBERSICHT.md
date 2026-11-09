@@ -655,3 +655,31 @@ vorher schon `.claude/skills/graphify/`.
 von `scripts/graphify-daily-refresh.sh` ansehen und bestätigen, ob er
 tatsächlich `graphify update .` statt `/graphify . --update` aufruft —
 falls ja, korrigieren, bevor `launchctl load` wieder läuft.
+
+### Script-Bug bestätigt und gefixt (2026-11-09)
+
+Bestätigt per `cat` auf dem Mac: Das Skript rief exakt `graphify update .`
+gefolgt von `graphify export obsidian --dir ...` auf — bewusst so gebaut,
+um täglich keine KI-Credits zu verbrauchen ("nur AST, gratis" laut
+Kommentar im Original), aber genau das zerstörte jede Nacht die
+semantische Ebene, bevor der Export sie in den Vault schrieb.
+
+**Nebenbefund:** Das Skript zeigt auf `20_WISSEN/Obsidian/...` als
+Vault-Pfad und hat dort nachweislich erfolgreich geschrieben — damit ist
+geklärt, dass `Workplace/Obsidian` und `Workplace/20_WISSEN/Obsidian`
+derselbe Ort sind (vermutlich Symlink). Die frühere Sorge dazu (Abschnitt
+0, Skill-Test-Vorfall) ist damit aufgelöst, kein Fehler.
+
+**Fix (fertig, jetzt erstmals versioniert):** `scripts/
+graphify-daily-refresh.sh` im Repo macht nur noch den kostenlosen lokalen
+AST-Refresh, **kein automatischer Obsidian-Export mehr**. Ein voller,
+semantisch reicher Export braucht weiterhin eine interaktive
+Claude-Code-Sitzung (`/graphify . --update`, kostet Credits) — bewusst
+nicht automatisierbar, muss manuell/bewusst ausgelöst werden.
+
+**Noch zu tun (auf dem Mac):**
+1. Korrigierte Fassung vom Repo aufs lokale Skript kopieren (überschreiben).
+2. `launchctl load ~/Library/LaunchAgents/com.jessenikoi.graphify-daily.plist`
+   — Automatismus wieder aktivieren, jetzt sicher.
+3. Optional: `99_SYSTEM/SETUP-STATUS.md` im Vault um den Fix ergänzen,
+   damit die dortige Doku nicht erneut hinter der Realität zurückbleibt.
