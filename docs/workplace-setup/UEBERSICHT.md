@@ -574,3 +574,47 @@ risikoarme Weg, der ohnehin zum bestehenden Vault-Konzept passt:
 1-4), oder ist dir das zu manuell und du willst das Risiko des
 Live-Bridge-Wegs bewusst in Kauf nehmen? Das ist deine Entscheidung, nicht
 meine — ich empfehle aber klar den risikoarmen Weg.
+
+## 8. Vorfall: Vault-Datenverlust durch Daily-Refresh (2026-11-08/09) — gelöst
+
+**Was passierte:** Eine lokale Sitzung führte statt des vollen
+`/graphify .`-Skill-Laufs (der nicht verfügbar war) die leichtgewichtigen
+CLI-Befehle `graphify update .` + `graphify export obsidian --dir
+.../10_PROJEKTE/claude-code/graph` aus — der gleiche Ablauf wie der
+automatisierte tägliche 09:00-Refresh. Der neue, kleinere Export (344
+Nodes/473 Edges/27 Communities statt der vollen KI-Extraktion) ersetzte
+den bestehenden Export im Vault-Ordner: von 3.672 Dateien auf 27
+Community-Notizen + `index.md` + `graph.canvas`.
+
+**Entdeckt dabei (bisher unbekannte Infrastruktur):**
+- Ein automatisierter täglicher Refresh existiert bereits:
+  Skript `scripts/graphify-daily-refresh.sh`, Zeitplan via
+  `~/Library/LaunchAgents/com.jessenikoi.graphify-daily.plist`.
+- Der Obsidian-Vault ist **bereits seit Längerem ein eigenes Git-Repo**
+  (unabhängig von diesem `claude-code`-Repo), mit eigener Commit-Historie:
+  `7395db8` (99_SYSTEM/SETUP-STATUS.md), `6a6710e` ("Graphify Full System
+  2026-07-05 — graph.html + GRAPH_REPORT je Projekt und Agenten-System" —
+  deutet auf **mehrere** bereits graphifizierte Code-Roots hin, nicht nur
+  `claude-code`), `93a18dc` (Daily-Notes/Templates-Config), `29e1071`
+  ("GPT-Export-Extrakte (851 Gespräche) + SOP Plaud-Transkript-Workflow" —
+  **Plaud hat also schon eine fertige SOP**, nicht nur unsere Recherche von
+  Abschnitt 7), `da6370d` ("Initial vault backup").
+- **Wichtige Korrektur zu Abschnitt 6:** Die Aussage "Vault-Git-Backup noch
+  nicht ausgeführt" war **falsch** — es existierte bereits.
+
+**Lösung (durchgeführt und verifiziert, 2026-11-08/09):**
+1. Datenrettung: `git checkout -- 10_PROJEKTE/claude-code/graph/` im
+   Vault-Repo — die Löschungen waren nur unstaged, der letzte Commit hatte
+   noch alles. Verifiziert: `ls ... | wc -l` → **3700** (3.672 alte + 27
+   neue + `index.md`) — **vollständige Wiederherstellung bestätigt.**
+2. Automatisierten Refresh pausiert:
+   `launchctl unload ~/Library/LaunchAgents/com.jessenikoi.graphify-daily.plist`
+   — lief ohne Fehler. **Läuft heute Nacht nicht mehr automatisch.**
+
+**Noch offen:** `99_SYSTEM/SETUP-STATUS.md` im Vault lesen, um den
+gesamten unbekannten Entwicklungsstrang (Multi-Projekt-Graphify, GPT-Export,
+Plaud-SOP) mit diesem Repo-Stand abzugleichen — unsere Doku hier ist an
+mehreren Stellen hinter der Realität auf dem Mac zurück. Danach entscheiden,
+ob/wie der Daily-Refresh wieder aktiviert wird (z.B. mit automatischem
+Commit nach jedem Lauf, damit sowas nicht nochmal passieren kann, ohne
+dass es sofort auffällt).
